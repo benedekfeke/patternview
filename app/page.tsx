@@ -1,103 +1,141 @@
-import Image from "next/image";
+import Color from 'color';
+import AlgoCard from './components/AlgoCard';
+import ParticleBackground from './components/ParticleBackground';
+import TypewriterHeading from './components/TypewriterHeading';
+
+
+const algorithms = [
+  {
+    slug: "queue",
+    name: "Queue",
+    image: "/bubble_sort.png", // Add your image assets to public/
+  },
+  {
+    slug: "quick-sort",
+    name: "Quick Sort",
+    image: "/quick_sort.jpg",
+  },
+  {
+    slug: "merge-sort",
+    name: "Merge Sort",
+    image: "/quick_sort.jpg",
+  },
+  // Add more algorithms as needed
+];
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  const darkMode = true;
+
+  let color = Color("#A259F7"); // Vibrant purple
+
+  let color1 = Color("#B71C1C").darken(0.2).saturate(2); // dark vivid red
+  let color2 = Color("#0D47A1").darken(0.2).saturate(2); // dark vivid blue
+  let color3 = Color("#C62828").darken(0.2).saturate(2.2); // deep hot red
+  let color4 = Color("#1565C0").darken(0.2).saturate(2.2); // deep electric blue
+  let color5 = Color("#B71C1C").darken(0.4).saturate(2.2); // very dark neon red
+  let color6 = Color("#0D47A1").darken(0.4).saturate(2.2); // very dark vivid blue
+  let color7 = Color("#1976D2").darken(0.2).saturate(2); // dark sky blue
+  let radius = 100;
+
+  return (
+    <div style={{ position: "relative", overflowX: 'hidden' }}>
+      <ParticleBackground darkMode={darkMode} />
+      {/* <Goo intensity='strong' style={{ position: "absolute", inset: 0, zIndex: -1, width: "100%", height: "100vh", overflow: "unset", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "100%", height: "100vh" }}>
+          <svg
+            role="img"
+            aria-label="Example of a gooey effect"
+            className="w-full h-dvh"
+            style={{ display: "block", margin: "auto" }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            <g style={{ animation: "rotate_back 9s linear infinite" }}>
+              <circle
+                cx="50%"
+                cy="50%"
+                r={radius}
+                fill={color1.toString()}
+                style={{
+                  animation: "blob_four 20s ease-in-out -3s infinite alternate"
+                }}
+              />
+              <circle
+                cx="50%"
+                cy="50%"
+                r={Math.floor(radius * 0.75)}
+                fill={color2.toString()}
+                style={{
+                  animation: "blob_three 15s ease-in-out -3s infinite alternate"
+                }}
+              />
+              <circle
+                cx="50%"
+                cy="50%"
+                r={Math.floor(radius * 0.64)}
+                fill={color3.toString()}
+                style={{
+                  animation: "blob_two 6s ease-in-out -3s infinite alternate"
+                }}
+              />
+              <circle
+                cx="50%"
+                cy="50%"
+                r={Math.floor(radius * 0.49)}
+                fill={color4.toString()}
+                style={{
+                  animation: "blob_one 9s ease-in-out -3s infinite alternate"
+                }}
+              />
+              <circle
+                cx="50%"
+                cy="50%"
+                r={Math.floor(radius * 0.98)}
+                fill={color5.toString()}
+                style={{
+                  animation: "blob_five 9s ease-in-out -3s infinite alternate"
+                }}
+              />
+              <circle
+                cx="50%"
+                cy="50%"
+                r={Math.floor(radius * 0.27)}
+                fill={color6.toString()}
+                style={{
+                  animation: "blob_six 9s ease-in-out -3s infinite alternate"
+                }}
+              />
+              <circle
+                cx="50%"
+                cy="50%"
+                r={Math.floor(radius * 0.39)}
+                fill={color7.toString()}
+                style={{
+                  animation: "blob_seven 9s ease-in-out -3s infinite alternate"
+                }}
+              />
+            </g>
+          </svg>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </Goo> */}
+        <div className="w-full max-w-screen-2xl mx-auto p-2 md:p-8 lg:p-12 font-[family-name:var(--font-sf)]">
+        {/* <h2 className="text-3xl font-bold mb-12 text-center">Available algorithms</h2> */}
+        <TypewriterHeading
+        text="Currently implemented algorithms"
+        className="text-3xl font-bold color-mb-12 text-center"/>
+        
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 md:gap-8 w-full">
+          <div className="col-span-full flex flex-wrap justify-center gap-5 md:gap-8">
+            {algorithms.map((algo) => (
+              <AlgoCard 
+                key={algo.slug} 
+                slug={algo.slug} 
+                image={algo.image} 
+                name={algo.name} 
+              />
+            ))}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
