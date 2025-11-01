@@ -47,7 +47,7 @@ export default function RootLayout({
         className={sf.variable}
       >
         <Header />
-        <main className="flex flex-col min-h-screen">
+        <main className="flex flex-col min-h-screen pointer-events-none">
           {children}
         </main>
         <Footer />

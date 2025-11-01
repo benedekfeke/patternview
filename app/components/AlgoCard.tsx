@@ -9,7 +9,7 @@ import {
 
 export default function AlgoCard({image, slug, name}: {image: string, slug:string, name:string}) {
   return (
-    <Card className="w-52 max-h-100 transition-colors duration-300 hover:bg-card-foreground hover:text-card bg-card text-card-foreground">
+    <Card className="relative z-10 w-52 max-h-100 transition-colors duration-300 hover:bg-card-foreground hover:text-card bg-accent/20 text-card-foreground backdrop-blur-xl pointer-events-auto">
       <CardHeader>
         <CardTitle className="text-center text-2xl font-bold">{name}</CardTitle>
       </CardHeader>
@@ -22,13 +22,11 @@ export default function AlgoCard({image, slug, name}: {image: string, slug:strin
           />
         </div>
         <div className="text-center mt-4">
-          <a href={`/algorithms/${slug}`} className="text-blue-500 hover:underline">
-          </a>
         </div>
       </CardContent>
       <CardFooter className="transition-all duration-150 ease hover:scale-110">
         <a href={`/algorithms/${slug}`} className="w-full">
-          <Button className="w-full hover:cursor-crosshair">
+          <Button className="w-full hover:cursor-pointer">
             View Algorithm
           </Button>
         </a>

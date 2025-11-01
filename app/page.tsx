@@ -1,7 +1,8 @@
 import Color from 'color';
 import AlgoCard from './components/AlgoCard';
-import ParticleBackground from './components/ParticleBackground';
-import TypewriterHeading from './components/TypewriterHeading';
+
+import Dither from '@/components/Dither';
+
 
 
 const algorithms = [
@@ -23,6 +24,8 @@ const algorithms = [
   // Add more algorithms as needed
 ];
 
+
+
 export default function Home() {
 
   const darkMode = true;
@@ -39,100 +42,45 @@ export default function Home() {
   let radius = 100;
 
   return (
-    <div style={{ position: "relative", overflowX: 'hidden' }}>
-      <ParticleBackground darkMode={darkMode} />
-      {/* <Goo intensity='strong' style={{ position: "absolute", inset: 0, zIndex: -1, width: "100%", height: "100vh", overflow: "unset", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "center", width: "100%", height: "100vh" }}>
-          <svg
-            role="img"
-            aria-label="Example of a gooey effect"
-            className="w-full h-dvh"
-            style={{ display: "block", margin: "auto" }}
-          >
-            <g style={{ animation: "rotate_back 9s linear infinite" }}>
-              <circle
-                cx="50%"
-                cy="50%"
-                r={radius}
-                fill={color1.toString()}
-                style={{
-                  animation: "blob_four 20s ease-in-out -3s infinite alternate"
-                }}
-              />
-              <circle
-                cx="50%"
-                cy="50%"
-                r={Math.floor(radius * 0.75)}
-                fill={color2.toString()}
-                style={{
-                  animation: "blob_three 15s ease-in-out -3s infinite alternate"
-                }}
-              />
-              <circle
-                cx="50%"
-                cy="50%"
-                r={Math.floor(radius * 0.64)}
-                fill={color3.toString()}
-                style={{
-                  animation: "blob_two 6s ease-in-out -3s infinite alternate"
-                }}
-              />
-              <circle
-                cx="50%"
-                cy="50%"
-                r={Math.floor(radius * 0.49)}
-                fill={color4.toString()}
-                style={{
-                  animation: "blob_one 9s ease-in-out -3s infinite alternate"
-                }}
-              />
-              <circle
-                cx="50%"
-                cy="50%"
-                r={Math.floor(radius * 0.98)}
-                fill={color5.toString()}
-                style={{
-                  animation: "blob_five 9s ease-in-out -3s infinite alternate"
-                }}
-              />
-              <circle
-                cx="50%"
-                cy="50%"
-                r={Math.floor(radius * 0.27)}
-                fill={color6.toString()}
-                style={{
-                  animation: "blob_six 9s ease-in-out -3s infinite alternate"
-                }}
-              />
-              <circle
-                cx="50%"
-                cy="50%"
-                r={Math.floor(radius * 0.39)}
-                fill={color7.toString()}
-                style={{
-                  animation: "blob_seven 9s ease-in-out -3s infinite alternate"
-                }}
-              />
-            </g>
-          </svg>
-        </div>
-      </Goo> */}
+    <div className="relative min-h-screen overflow-x-hidden">
+      {/* Dither Background: Fixed position to stay in the background */}
+      <div className="fixed inset-0 z-0">
+        <Dither
+          waveColor={[0.5, 0.5, 0.5]}
+          disableAnimation={false}
+          enableMouseInteraction={true}
+          mouseRadius={0.3}
+          colorNum={4}
+          waveAmplitude={0.53}
+          waveFrequency={2}
+          waveSpeed={0.05}
+        />
+      </div>
+
+      {/* Main Content: Positioned relatively to sit on top of the background */}
+      <div className="relative pointer-events-none">
         <div className="w-full max-w-screen-2xl mx-auto p-2 md:p-8 lg:p-12 font-[family-name:var(--font-sf)]">
-        {/* <h2 className="text-3xl font-bold mb-12 text-center">Available algorithms</h2> */}
-        <TypewriterHeading
-        text="Currently implemented algorithms"
-        className="text-3xl font-bold color-mb-12 text-center"/>
-        
+          {/* <TypewriterHeading
+            text="Currently implemented algorithms"
+            className="text-3xl font-bold text-white mb-12 text-center"
+          /> */}
+          <div className='w-full p-5 font-extrabold justify-self-center text-center text-8xl text-accent'>
+            <h1 className='z-10'>
+              PatternView
+            </h1>
+          </div>
+          
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 md:gap-8 w-full">
-          <div className="col-span-full flex flex-wrap justify-center gap-5 md:gap-8">
-            {algorithms.map((algo) => (
-              <AlgoCard 
-                key={algo.slug} 
-                slug={algo.slug} 
-                image={algo.image} 
-                name={algo.name} 
-              />
-            ))}
+            <div className="col-span-full flex flex-wrap justify-center gap-5 md:gap-8">
+              {algorithms.map((algo) => (
+                <AlgoCard
+                  key={algo.slug} 
+                  slug={algo.slug} 
+                  image={algo.image} 
+                  name={algo.name} 
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
