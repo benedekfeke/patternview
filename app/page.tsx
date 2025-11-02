@@ -64,7 +64,7 @@ export default function Home() {
             text="Currently implemented algorithms"
             className="text-3xl font-bold text-white mb-12 text-center"
           /> */}
-          <div className='w-full p-5 font-extrabold justify-self-center text-center text-8xl text-accent'>
+          <div className='w-full p-5 font-extrabold justify-self-center text-center text-8xl text-accent  '>
             <h1 className='z-10'>
               PatternView
             </h1>
