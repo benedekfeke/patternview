@@ -3,8 +3,6 @@ import AlgoCard from './components/AlgoCard';
 
 import Dither from '@/components/Dither';
 
-
-
 const algorithms = [
   {
     slug: "queue",
@@ -12,8 +10,8 @@ const algorithms = [
     image: "/bubble_sort.png", // Add your image assets to public/
   },
   {
-    slug: "quick-sort",
-    name: "Quick Sort",
+    slug: "pathfinding",
+    name: "Pathfinding",
     image: "/quick_sort.jpg",
   },
   {
@@ -46,11 +44,11 @@ export default function Home() {
       {/* Dither Background: Fixed position to stay in the background */}
       <div className="fixed inset-0 z-0">
         <Dither
-          waveColor={[0.5, 0.5, 0.5]}
+          waveColor={[0.5, 0.6, 0.75]}
           disableAnimation={false}
           enableMouseInteraction={true}
           mouseRadius={0.3}
-          colorNum={4}
+          colorNum={5}
           waveAmplitude={0.53}
           waveFrequency={2}
           waveSpeed={0.05}
@@ -65,7 +63,7 @@ export default function Home() {
             className="text-3xl font-bold text-white mb-12 text-center"
           /> */}
           <div className='w-full p-5 font-extrabold justify-self-center text-center text-8xl text-accent  '>
-            <h1 className='z-10'>
+            <h1 className='z-10 tracking'>
               PatternView
             </h1>
           </div>

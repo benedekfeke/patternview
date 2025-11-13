@@ -14,7 +14,11 @@ export default function Profile() {
   }
 
   if (!user) {
-    return null;
+    return (
+      <div className="no-user-state">
+        <div className="no-user-text">You are not logged in. Please <a href="/api/auth/login">log in</a> to view your profile.</div>
+      </div>
+    );
   }
 
   return (
