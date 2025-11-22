@@ -1,7 +1,6 @@
+import Dither from '@/components/Dither';
 import Color from 'color';
 import AlgoCard from './components/AlgoCard';
-
-import Dither from '@/components/Dither';
 
 const algorithms = [
   {
@@ -22,14 +21,11 @@ const algorithms = [
   // Add more algorithms as needed
 ];
 
-
-
-export default function Home() {
+export default async function Home() {
 
   const darkMode = true;
 
   let color = Color("#A259F7"); // Vibrant purple
-
   let color1 = Color("#B71C1C").darken(0.2).saturate(2); // dark vivid red
   let color2 = Color("#0D47A1").darken(0.2).saturate(2); // dark vivid blue
   let color3 = Color("#C62828").darken(0.2).saturate(2.2); // deep hot red
@@ -44,7 +40,7 @@ export default function Home() {
       {/* Dither Background: Fixed position to stay in the background */}
       <div className="fixed inset-0 z-0">
         <Dither
-          waveColor={[0.5, 0.6, 0.75]}
+          waveColor={[0.5, 0.5, 0.5]}
           disableAnimation={false}
           enableMouseInteraction={true}
           mouseRadius={0.3}
