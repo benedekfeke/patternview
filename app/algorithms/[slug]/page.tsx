@@ -13,15 +13,19 @@ export default async function AlgorithmPage({ params }: { params: { slug: string
   const config = algorithmConfigs[awaitedParams.slug];
 
   return (
-    <div className="min-h-screen bg-blue-400">
-      <h1 className="text-3xl font-bold text-gray-800 mb-6 capitalize">
-        Algorithm: {awaitedParams.slug}
-      </h1>
-      {config ? (
-        <AlgorithmVisualizer config={config} className="w-full h-full" />
-      ) : (
-        <p>Algorithm {awaitedParams.slug} is not implemented yet.</p>
-      )}
+    <div className="flex-1 flex flex-col bg-black">
+
+      <div className="flex-1 flex items-center justify-center pb-4">
+        {config ? (
+          <div className="w-full h-full max-w-7xl">
+            <AlgorithmVisualizer config={config} className="w-full h-full" />
+          </div>
+        ) : (
+          <p className="text-white text-xl">Algorithm {awaitedParams.slug} is not implemented yet.</p>
+        )}
+
+      </div>
+
       
     </div>
   );

@@ -7,6 +7,16 @@ html, body {
   overflow-x: hidden;
 }
 
+/* Layout utilities */
+.main-content {
+  min-height: calc(100vh - var(--header-height, 64px) - var(--footer-height, 48px));
+}
+
+/* Global link hover effect */
+.link-hover {
+  @apply underline hover:bg-white hover:text-black transition-all ease-in duration-300 cursor-pointer hover:m-2;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

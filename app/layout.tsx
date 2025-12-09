@@ -4,9 +4,6 @@ import Footer from "./Footer";
 import "./globals.css";
 import Header from "./Header";
 
-// import { UserProvider } from '@auth0/nextjs-auth0/client';
-
-
 const sf = localFont({
   src: [
     {
@@ -45,16 +42,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={sf.variable}
-      >
-        {/* <UserProvider> */}
+      <body className={`${sf.variable} flex flex-col min-h-screen`}>
         <Header />
-        <main className="flex flex-col min-h-screen pointer-events-none">
+        <main className="flex-1 flex flex-col pointer-events-none">
           {children}
         </main>
         <Footer />
-        {/* </UserProvider> */}
       </body>
     </html>
   );

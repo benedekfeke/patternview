@@ -1,4 +1,5 @@
 'use client';
+import DescriptionModal, { DescriptionSegment } from '@/app/components/DescriptionModal';
 import { Button } from '@/components/ui/button';
 import { useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
@@ -9,6 +10,7 @@ interface AlgorithmConfig {
   sceneName: string,
   title: string,
   description: string,
+  modalDescription?: DescriptionSegment[],
   operations: string[],
   pseudocodes: Array<{title: string; code: string}>;
   explanationRules?: {
@@ -26,7 +28,7 @@ interface AlgorithmVisualizerProps {
 function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisualizerProps) {
   const unityContext = useSharedUnity();
   
-  const [score, setScore] = useState(0);
+  const [score, setScore] = useState(1);
   const [explanation, setExplanation] = useState<string>("");
   const [snippet, setSnippet] = useState<string>("");
   const [showSnippet, setShowSnippet] = useState(false);
@@ -84,19 +86,19 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
 
   // handlers - e.g. enqueue has idx = 0, dequeue has idx= 1
   const handleOperation = useCallback((operationIndex: number) => (...parameters: any[]) => {
-    const newScore = parameters[0] as number;
-
     //update score based on operation
-    setScore(operationIndex === 0 ? prev => prev + 1 : prev => prev -1);
-    setExplanation(getExplanation(newScore));
-    setSnippet(config.pseudocodes[operationIndex].code);
+    setScore(prevScore => {
+      const newScore = operationIndex === 0 ? prevScore + 1 : prevScore - 1;
 
-    setShowSnippet(true);
-
-    setTimeout(() => {
-      setShowSnippet(false)
-    }, 2000);
-  }, [config]);
+      //use the calculated value immediately
+      setExplanation(getExplanation(newScore));
+      setSnippet(config.pseudocodes[operationIndex].code);
+      setShowSnippet(true);
+      
+      return newScore;
+      }
+    );
+  }, [config, getExplanation]);
   
   //register dispatch events from unity with handlers
   useEffect(() => {
@@ -120,35 +122,44 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
 
   //return the component
   return (
-    <>
+    <div className={`flex flex-col h-full ${className}`}>
       {!isLoaded && (
         <div className='flex items-center justify-center h-full text-white'>
           Loading {config.title}... {Math.round(unityContext.loadingProgression * 100)}%
         </div>
       )}
 
-      <div className="flex flex-row m-2 h-fit space-x-2 rounded-2xl shadow-lg max-h-screen pointer-events-auto">
-        <div className="basis-2/3 rounded-2xl overflow-hidden transition-all duration-500 ease-in-out">
-          <Unity 
-            unityProvider={unityContext.unityProvider} 
-            className={`w-full h-full pointer-events-auto ${isLoaded ? 'block' : 'hidden'}`}
-          />
+      <div className="flex flex-row flex-1 gap-4 pointer-events-auto">
+        {/* Unity container - 4:3 aspect ratio (Game) */}
+        <div className="flex-1 flex items-center justify-center">
+          <div className='relative w-full h-0 pb-[75%] max-h-[calc(100vh-200px)]'>
+            <div className='absolute inset-0 rounded-2xl overflow-hidden shadow-lg'>
+              <Unity 
+                unityProvider={unityContext.unityProvider} 
+                className={`w-full h-full pointer-events-auto ${isLoaded ? 'block' : 'hidden'}`}
+              />
+            </div>
+          </div>
         </div>
-        <div className="basis-1/3 rounded-2xl flex flex-col space-y-2 pointer-events-auto">
-          <div className="basis-1/3 p-2 rounded-2xl text-white border-2 border-white bg-black/50">
+
+        {/* Side Panel */}
+        <div className="w-80 flex flex-col gap-3 pointer-events-auto">
+          {/* Explanation Panel */}
+          <div className="p-4 rounded-2xl text-white border-2 border-white/30 bg-black/50 backdrop-blur-sm font-mono">
             <p>{explanation}</p>
             {showSnippet && (
-              <p
-                className="text-white mt-2"
+              <p className="text-white mt-2 text-sm font-mono"
                 dangerouslySetInnerHTML={{ __html: snippet }}
               />
             )}
           </div>
           
-          <div className="basis-2/3 overflow-y-auto p-4 rounded-2xl text-black font-[family-name:var(--font-sf)] border-2 border-white bg-blue-500">
-            <p dangerouslySetInnerHTML={{ __html: config.description }} />
+          {/* Description Panel */}
+          <div className="flex-1 overflow-y-auto p-4 rounded-2xl text-white font-[family-name:var(--font-sf)] border-white/30 bg-white/10 backdrop-blur-sm">
+            <h2 className='text-lg font-bold mb-2'>{config.title}</h2>
+            <p className='text-sm' dangerouslySetInnerHTML={{ __html: config.description }} />
             <br/>
-            <ul className="list-disc pl-5">
+            <ul className="list-disc pl-5 text-sm">
               {config.operations.map((op, idx) => (
                 <li key={idx}>{op}: {config.pseudocodes[idx]?.title || 'Operation'}</li>
               ))}
@@ -156,36 +167,40 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
 
             <Button 
               onClick={() => setIsModalOpen(true)}
-              className="relative bottom-1 left-0 bg-red-900 rounded-2xl p-1 mt-4 hover:bg-amber-300 transition-all duration-300 cursor-pointer"
+              className="mt-4 bg-white/20 hover:bg-white/30 text-white rounded-xl px-4 py-2 transition-all duration-300 cursor-pointer border border-white/30"
             >
               More Info
             </Button>
           </div>
         </div>
+        
         {/* Modal Portal */}
         {isModalOpen && createPortal(
           <div 
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fadeIn pointer-events-auto"
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 animate-fadeIn pointer-events-none"
             onClick={() => setIsModalOpen(false)}
           >
             <div 
-              className="bg-white rounded-2xl p-6 max-w-2xl max-h-[80vh] overflow-y-auto shadow-2xl animate-fadeIn"
+              className="bg-black/50 rounded-2xl p-6 max-h-[80vh] w-[600px] max-w-[90vw] overflow-y-auto animate-fadeIn border-1 border-white"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-2xl font-bold text-black">{config.title}</h2>
-                <Button size={'sm'} variant={'outline'} onClick={() => setIsModalOpen(false)}>×</Button>
+              <div className="flex justify-between items-center mb-4 pointer-events-auto">
+                <h2 className="text-2xl font-bold text-accent border-1 rounded-4xl px-4">{config.title}</h2>
+                <Button size={'sm'} className='rounded-4xl w-max hover:cursor-pointer hover:text-destructive hover:shadow-destructive' variant={'outline'} onClick={() => setIsModalOpen(false)}>×</Button>
               </div>
-              {/* TODO: ADD MODAL-DESCRIPTION OVERLAYS (Maybe a horizontal scrolling with button??) */}
-              <div className="text-black">
-                <p>Additional information about {config.title}...</p>
+              <div className="text-black pointer-events-auto">
+                {config.modalDescription ? (
+                  <DescriptionModal segments={config.modalDescription} />
+                ) : (
+                  <p>Additional information about {config.title}...</p>
+                )}
               </div>
             </div>
           </div>,
           document.body
         )}
       </div>
-    </>
+    </div>
   );
 }
 

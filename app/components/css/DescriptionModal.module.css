@@ -1,0 +1,39 @@
+.parent {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 0;
+  box-sizing: border-box;
+  text-align: left;
+  font-size: 16px;
+  color: var(--color-white);
+  font-family: var(--font-averia-sans-libre);
+}
+.main {
+  width: 100%;
+  position: relative;
+  letter-spacing: -0.01em;
+  line-height: 1.6;
+  display: block;
+  font-weight: normal;
+}
+.hug {
+  width: 100%;
+}
+.paragraph {
+  margin: 0;
+}
+.link {
+  color: #2563eb;
+  text-decoration: none !important;
+}
+.link:hover {
+  text-decoration: underline;
+  background-color: black;
+  color: white;
+  margin: 4px;
+}
+.underline {
+  text-decoration: underline;
+}
