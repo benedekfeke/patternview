@@ -6,17 +6,20 @@ const algorithms = [
   {
     slug: "queue",
     name: "Queue",
-    image: "/bubble_sort.png", // Add your image assets to public/
+    lottie: "/queue.lottie"
+    // image: "/bubble_sort.png",
   },
   {
     slug: "pathfinding",
     name: "Pathfinding",
-    image: "/quick_sort.jpg",
+    lottie: "/pathfinding.lottie"
+    // image: "/quick_sort.jpg",
   },
   {
     slug: "merge-sort",
-    name: "Merge Sort",
-    image: "/quick_sort.jpg",
+    name: "Sorting",
+    lottie: "/sorting.lottie"
+    // image: "/quick_sort.jpg",
   },
   // Add more algorithms as needed
 ];
@@ -70,7 +73,7 @@ export default async function Home() {
                 <AlgoCard
                   key={algo.slug} 
                   slug={algo.slug} 
-                  image={algo.image} 
+                  lottie={algo.lottie}
                   name={algo.name} 
                 />
               ))}

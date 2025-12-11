@@ -137,7 +137,7 @@ export default function AlgorithmEditor({ name, config, onSave, onClose }: Algor
                     updateField('modalDescription', [...editedConfig.modalDescription, { text: '' }]);
                   }}
                   size="lg"
-                  className="bg-purple-300 text-black border-white/20 hover:bg-purple-800 hover:text-white"
+                  className="bg-purple-300 text-black border-white/20 hover:bg-purple-800 hover:text-white hover:mt-2"
                 >
                   + Add Segment
                 </Button>
@@ -179,7 +179,7 @@ export default function AlgorithmEditor({ name, config, onSave, onClose }: Algor
                 updateField('pseudocodes', [...editedConfig.pseudocodes, { title: '', code: '' }]);
               }}
               size="lg"
-              className="bg-purple-300 text-black border-white/20 hover:bg-purple-800 hover:text-white"
+              className="bg-purple-300 text-black border-white/20 hover:bg-purple-800 hover:text-white hover:mt-2"
             >
               + Add Pseudocode
             </Button>
@@ -191,13 +191,13 @@ export default function AlgorithmEditor({ name, config, onSave, onClose }: Algor
       <div className="flex justify-end gap-2 mt-4">
         <Button
           onClick={() => setEditedConfig(config)}
-          className="bg-red-300 text-black border-white/20 hover:bg-red-600 hover:text-white"
+          className="bg-red-300 text-black border-white/20 hover:bg-red-600 hover:text-white hover:mr-4"
         >
           Reset
         </Button>
         <Button
           onClick={handleSave}
-          className="bg-green-600 hover:bg-green-700 text-white"
+          className="bg-blue-300 text-black hover:bg-blue-800 hover:text-white hover:ml-4"
         >
           Save Changes
         </Button>

@@ -42,7 +42,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${sf.variable} flex flex-col min-h-screen`}>
+      <body className={`${sf.variable} flex flex-col h-dvh`}>
         <Header />
         <main className="flex-1 flex flex-col pointer-events-none">
           {children}
