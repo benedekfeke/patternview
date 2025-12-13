@@ -40,7 +40,9 @@ export default function HeaderClient({user}: {user: User | null}) {
   // For local testing, use the button below
 
   return (
-    <div className="container mx-auto px-4 md:px-6 lg:px-8 font-[family-name:var(--font-sf)] pointer-events-auto bg-black">
+    <div className='w-full font-[family-name:var(--font-sf)] pointer-events-auto bg-black'>
+
+    <div className="container mx-auto px-4 md:px-6 lg:px-8">
       <header className="flex h-14 w-full shrink-0 items-center px-4 md:px-6 lg:px-8">
         <Link href="/" className="mr-6 pt-5 pb-5 hidden lg:flex" prefetch={false}>
         <Image src={'/logo-plain-noback.png'}
@@ -48,35 +50,35 @@ export default function HeaderClient({user}: {user: User | null}) {
               height={32}
               alt='main logo'
               className='z-10'
-        />
+              />
         </Link>
         <div className=" ml-auto flex gap-2">
           {/* These links have their own backgrounds and will appear on top of the Dither component */}
           <Link
             href="/dashboard"
-            className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-md bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 transition-colors hover:bg-white/20"
+            className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-md bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 transition-colors hover:bg-white hover:text-black"
             prefetch={false}
-          >
+            >
             Dashboard
           </Link>
           <Link
             href={`/test`}
-            className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-md bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 transition-colors hover:bg-white/20"
+            className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-md bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 transition-colors hover:bg-white hover:text-black"
             prefetch={false}
-          >
+            >
             TestPage
           </Link>
           <Button
             onClick={handleSync}
-            className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-md bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 transition-colors hover:bg-white/20"
-          >
+            className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-md bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 transition-colors hover:bg-white hover:text-black"
+            >
             Sync with local DB
           </Button>
           {!user && (
             <Link
-              href="/auth/login"
-              className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-md bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 transition-colors hover:bg-white/20"
-              prefetch={false}
+            href="/auth/login"
+            className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-md bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 transition-colors hover:bg-white hover:text-black"
+            prefetch={false}
             >
               Login
             </Link>
@@ -85,20 +87,21 @@ export default function HeaderClient({user}: {user: User | null}) {
             <>
               <Link
                 href="/profile"
-                className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-md bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 transition-colors hover:bg-white/20"
-              >
+                className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-md bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 transition-colors hover:bg-white hover:text-black"
+                >
                 Profile
               </Link>
               <Link
                 href="/auth/logout"
-                className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-md bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 transition-colors hover:bg-white/20"
-              >
+                className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-md bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 transition-colors hover:bg-white hover:text-black"
+                >
                 Logout
               </Link>
             </>
           )}
         </div>
       </header>
+    </div>
     </div>
   )
 }

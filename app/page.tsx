@@ -1,4 +1,5 @@
 import Dither from '@/components/Dither';
+import { auth0 } from '@/lib/auth0';
 import Color from 'color';
 import AlgoCard from './components/AlgoCard';
 
@@ -25,6 +26,9 @@ const algorithms = [
 ];
 
 export default async function Home() {
+
+  const session = await auth0.getSession();
+  const isLoggedIn = !!session?.user;
 
   const darkMode = true;
 
@@ -75,6 +79,7 @@ export default async function Home() {
                   slug={algo.slug} 
                   lottie={algo.lottie}
                   name={algo.name} 
+                  isLoggedIn={isLoggedIn}
                 />
               ))}
             </div>

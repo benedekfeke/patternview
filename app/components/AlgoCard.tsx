@@ -8,15 +8,18 @@ import {
   CardTitle
 } from "@/components/ui/card";
 import { DotLottie, DotLottieReact } from '@lottiefiles/dotlottie-react';
+import Link from "next/link";
+import {Lock} from 'lucide-react';
 import { useCallback, useState } from "react";
 
 interface AlgoCardProps {
   lottie?: string;
   slug: string;
   name: string;
+  isLoggedIn: boolean;
 }
 
-export default function AlgoCard({lottie, slug, name}: AlgoCardProps) {
+export default function AlgoCard({lottie, slug, name, isLoggedIn}: AlgoCardProps) {
 
   const [isHovered, setIsHovered] = useState(false);
   const [dotLottie, setDotLottie] = useState<DotLottie | null>(null)
@@ -47,13 +50,26 @@ export default function AlgoCard({lottie, slug, name}: AlgoCardProps) {
         </div>
       </CardContent>
       <CardFooter className="z-10 transition-all duration-150 ease">
-        <a href={`/algorithms/${slug}`} className="w-full">
-          <Button className="w-full bg-purple-300 text-black hover:cursor-pointer hover:bg-purple-800 hover:text-white transition-all duration-100">
-            View Algorithm
-          </Button>
-        </a>
+        {isLoggedIn ? (
+          <Link href = {`algorithms/${slug}`} className="w-full">
+            <Button className="w-full bg-purple-300 text-black hover:cursor-pointer hover:bg-purple-800 hover:text-white transition-all duration-100">
+              View Algorithm
+            </Button>
+          </Link>
+        ) : (
+          <div className="w-full flex flex-col items-center gap-2">
+            <div className="flex items-center gap-2 text-gray-400 text-sm">
+              <Lock size={16} />
+              <span>Locked</span>
+            </div>
+            <Link href="/auth/login" className="w-full">
+              <Button className="w-full bg-gray-500 text-white hover:cursor-pointer hover:bg-gray-600 transition-all duration-100">
+                Log in to access
+              </Button>
+            </Link>
+          </div>
+        )}
       </CardFooter>
-
     </Card>
   );
 }

@@ -26,7 +26,7 @@ export default function AlgorithmEditor({ name, config, onSave, onClose }: Algor
   };
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full pointer-events-auto">
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-white">{config.title}</h2>
