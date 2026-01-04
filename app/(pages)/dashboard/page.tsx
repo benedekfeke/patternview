@@ -1,6 +1,6 @@
 'use client'
-import { pathfindingConfig } from "@/app/algorithms/[slug]/configs/pathfindingConfig";
-import { queueConfig } from "@/app/algorithms/[slug]/configs/queueConfig";
+import { pathfindingConfig } from "@/src/domain/algorithm/configs/pathfinding.config";
+import { queueConfig } from "@/src/domain/algorithm/configs/queue.config";
 import { useState } from "react";
 import AlgorithmManager, { AlgorithmConfig } from "./components/AlgorithmManager";
 import AnalyticsPanel from "./components/AnalyticsPanel";

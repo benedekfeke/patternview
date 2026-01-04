@@ -1,4 +1,4 @@
-import Dither from '@/components/Dither';
+import Dither from '@/app/components/background/Dither';
 import { auth0 } from '@/lib/auth0';
 import Color from 'color';
 import AlgoCard from './components/AlgoCard';

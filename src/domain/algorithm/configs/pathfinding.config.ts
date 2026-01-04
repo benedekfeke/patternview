@@ -1,8 +1,7 @@
-import { DescriptionSegment } from '@/app/components/DescriptionModal';
-
+import { AlgorithmConfig } from '../algorithm.types';
 
 // TODO: figure out how to edit this page from /dashboard/page
-export const pathfindingConfig = {
+export const pathfindingConfig: AlgorithmConfig = {
   sceneName: 'Pathfinding',
   title: 'Pathfinding algorithm',
   description: `<a href='https://en.wikipedia.org/wiki/Pathfinding' class="link-hover">PATHFINDING</a> algorithms find the shortest path between two points in a graph or grid.`,
@@ -16,8 +15,7 @@ export const pathfindingConfig = {
     { text: '\n\nPathfinding is closely related to the shortest path problem within ' },
     { text: 'graph theory', link: 'https://en.wikipedia.org/wiki/Graph_theory' },
     { text: ', which examines how to identify the path that best meets some criteria between two points in a large network.' }
-  ] as DescriptionSegment[],
-  operations: ['Reset', 'GenerateNewGraph', 'FindPath'],
+  ],
   pseudocodes: [
     {
       title: "Reset game with current graph",
@@ -32,9 +30,11 @@ export const pathfindingConfig = {
       code: `function SolveDijkstra(grid) {<br/> &nbsp;&nbsp;...<br/>}`,
     }
   ],
+  operations: ['Reset', 'GenerateNewGraph', 'FindPath'],
   //TODO: get comparison of dijkstra vs greedy(user) pathlenghts from dispatch
-  explanataionRules: {
-    start: "The objective is to find the goal node",
-    found: ""
+  explanationRules: {
+    empty: "The objective is to find the goal node",
+    hasItems: "TODO",
+    default: "TODO"
   }
 }

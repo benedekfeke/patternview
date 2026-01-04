@@ -1,8 +1,6 @@
 
 import { auth0 } from '@/lib/auth0';
-import HeaderClient from './components/HeaderClient';
-
-
+import HeaderClient from './HeaderClient';
 
 export default async function Header() {
 

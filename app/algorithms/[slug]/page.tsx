@@ -1,16 +1,12 @@
+import { getAlgorithmConfig } from "@/src/domain/algorithm/algorithm.registry";
 import AlgorithmVisualizer from "./AlgorithmVisualizer";
-import { pathfindingConfig } from "./configs/pathfindingConfig";
-import { queueConfig } from "./configs/queueConfig";
 
-const algorithmConfigs: Record<string, any> = {
-  queue: queueConfig,
-  pathfinding: pathfindingConfig,
-  //add more as needed
-};
-
-export default async function AlgorithmPage({ params }: { params: { slug: string } }) {
-  const awaitedParams = await params;
-  const config = algorithmConfigs[awaitedParams.slug];
+export default async function AlgorithmPage({ params }: { 
+  params: Promise<{ slug: string }> 
+}) {
+  // Nextjs 15 introduces async params on dynamic routes, hence we need await
+  const { slug } = await params;
+  const config = getAlgorithmConfig(slug);
 
   return (
     <div className="flex-1 flex flex-col bg-black">
@@ -21,12 +17,10 @@ export default async function AlgorithmPage({ params }: { params: { slug: string
             <AlgorithmVisualizer config={config} className="w-full h-full" />
           </div>
         ) : (
-          <p className="text-white text-xl">Algorithm {awaitedParams.slug} is not implemented yet.</p>
+          <p className="text-white text-xl">Algorithm "{slug}" is not implemented yet.</p>
         )}
 
       </div>
-
-      
     </div>
   );
 }

@@ -1,24 +1,12 @@
 'use client';
-import DescriptionModal, { DescriptionSegment } from '@/app/components/DescriptionModal';
-import { Button } from '@/components/ui/button';
+import DescriptionModal from '@/app/components/DescriptionModal';
+import { Button } from '@/app/components/button';
+import { useSharedUnity } from '@/src/adapters/unity/UnityProvider';
+import { AlgorithmConfig } from '@/src/domain/algorithm/algorithm.types';
 import { useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Unity } from 'react-unity-webgl';
-import { useSharedUnity } from '../UnityProvider';
 
-interface AlgorithmConfig {
-  sceneName: string,
-  title: string,
-  description: string,
-  modalDescription?: DescriptionSegment[],
-  operations: string[],
-  pseudocodes: Array<{title: string; code: string}>;
-  explanationRules?: {
-    empty: string;
-    hasItems: string;
-    default: string;
-  };
-}
 
 interface AlgorithmVisualizerProps {
   config: AlgorithmConfig,
@@ -145,14 +133,14 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
         {/* Side Panel */}
         <div className="w-80 flex flex-col gap-3 pointer-events-auto">
           {/* Explanation Panel */}
-          <div className="p-4 rounded-2xl text-white border-2 border-white/30 bg-black/50 backdrop-blur-sm font-mono">
+            <div className="p-4 rounded-2xl border-2 border-white/30 bg-black/50 backdrop-blur-sm text-primary" style={{ fontFamily: 'monospace' }}>
             <p>{explanation}</p>
             {showSnippet && (
-              <p className="text-white mt-2 text-sm font-mono"
-                dangerouslySetInnerHTML={{ __html: snippet }}
+              <p className="text-white mt-2 text-sm"
+              dangerouslySetInnerHTML={{ __html: snippet }}
               />
             )}
-          </div>
+            </div>
           
           {/* Description Panel */}
           <div className="flex-1 overflow-y-auto p-4 rounded-2xl text-white font-[family-name:var(--font-sf)] border-white/30 bg-white/10 backdrop-blur-sm">

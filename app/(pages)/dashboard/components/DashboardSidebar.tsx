@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from "@/app/components/button";
 
 export type PanelType = 'algorithms' | 'users' | 'analytics' | null;
 

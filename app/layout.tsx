@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import Footer from "./Footer";
+import Footer from "./components/Footer";
 import "./globals.css";
-import Header from "./Header";
+import Header from "./components/Header";
 
 const sf = localFont({
   src: [

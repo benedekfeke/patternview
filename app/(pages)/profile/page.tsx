@@ -1,10 +1,10 @@
 'use client';
 
-import Dither from "@/components/Dither";
+import TextBox from "@/app/components/TextBox";
+import Dither from "@/app/components/background/Dither";
 import { useUser } from "@auth0/nextjs-auth0";
 import { Calendar, Lock, Mail, User } from "lucide-react";
 import { useEffect, useState } from "react";
-import TextBox from "../components/TextBox";
 
 export default function Profile() {
   const { user, isLoading } = useUser();

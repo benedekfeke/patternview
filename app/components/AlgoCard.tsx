@@ -1,15 +1,15 @@
 'use client'
-import { Button } from "@/components/ui/button";
+import { Button } from "@/app/components/button";
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
   CardTitle
-} from "@/components/ui/card";
+} from "@/app/components/card";
 import { DotLottie, DotLottieReact } from '@lottiefiles/dotlottie-react';
+import { Lock } from 'lucide-react';
 import Link from "next/link";
-import {Lock} from 'lucide-react';
 import { useCallback, useState } from "react";
 
 interface AlgoCardProps {

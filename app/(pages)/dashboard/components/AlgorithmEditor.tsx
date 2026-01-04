@@ -1,6 +1,6 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/app/components/button';
 import { useState } from 'react';
 import { AlgorithmConfig } from './AlgorithmManager';
 

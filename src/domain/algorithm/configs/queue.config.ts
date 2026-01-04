@@ -1,7 +1,7 @@
 
-import { DescriptionSegment } from '@/app/components/DescriptionModal';
+import { AlgorithmConfig } from '../algorithm.types';
 
-export const queueConfig = {
+export const queueConfig: AlgorithmConfig = {
   sceneName: 'Queue',
   title: 'Queue Data Structure',
   description: `A <a href='https://en.wikipedia.org/wiki/Queue_(abstract_data_type)' class="link-hover">QUEUE</a> is an organized group of objects where new items are added at one end, known as the rear, and old items are taken out at the other end, known as the front. It follows the <a href='https://en.wikipedia.org/wiki/FIFO_(computing_and_electronics)' class="link-hover">First-In-First-Out (FIFO)</a> principle.`,
@@ -21,7 +21,7 @@ export const queueConfig = {
     { text: ' or ' },
     { text: 'linked lists', link: 'https://en.wikipedia.org/wiki/Linked_list' },
     { text: '.' }
-  ] as DescriptionSegment[],
+  ],
 
   pseudocodes: [
     {

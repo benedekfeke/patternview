@@ -44,3 +44,6 @@ next-env.d.ts
 *.excalidraw
 *.mp4
 
+notes.txt
+firstIdeas.excalidraw
+app/test/

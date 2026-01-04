@@ -1,4 +1,4 @@
-import { UnityProvider } from "./UnityProvider";
+import { UnityProvider } from "@/src/adapters/unity/UnityProvider";
 
 export default function AlgorithmsLayout({
   children,

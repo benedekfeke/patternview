@@ -1,7 +1,10 @@
 'use client'
-import { Button } from '@/components/ui/button';
+import { Button } from '@/app/components/button';
+import { BookOpen } from 'lucide-react';
 import Image from 'next/image';
 import Link from "next/link";
+import { useState } from 'react';
+import NotepadModal from './NotepadModal';
 
 type User = {
   sub?: string,
@@ -10,12 +13,14 @@ type User = {
 };
 
 export default function HeaderClient({user}: {user: User | null}) {
+  const [isNotepadOpen, setIsNotepadOpen] = useState<boolean>(false);
+
   const handleSync = async () => {
 
     if (!user?.sub || !user?.email) return;
 
     try {
-      const res = await fetch('/api/sync_user', {
+      const res = await fetch('/api/users/sync', {
         method: "POST",
         headers: {
           "Content-Type": "application/json"},
@@ -53,6 +58,18 @@ export default function HeaderClient({user}: {user: User | null}) {
               />
         </Link>
         <div className=" ml-auto flex gap-2">
+
+          {/* notepad -modal */}
+          {user && (
+            <Button onClick={() => setIsNotepadOpen(true)}
+            className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-md bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 transition-colors hover:bg-white hover:text-black"
+            >
+              <BookOpen size={16} className='mr-2' />
+              Notepad
+            </Button>
+
+          )}
+
           {/* These links have their own backgrounds and will appear on top of the Dither component */}
           <Link
             href="/dashboard"
@@ -102,6 +119,12 @@ export default function HeaderClient({user}: {user: User | null}) {
         </div>
       </header>
     </div>
+
+    {/* Notepad modal - render with portal */}
+    {user && (
+      <NotepadModal isOpen={isNotepadOpen} onClose={() => setIsNotepadOpen(false)}/>
+    )}
+
     </div>
   )
 }
