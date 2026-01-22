@@ -2,8 +2,10 @@
 import DescriptionModal from '@/app/components/DescriptionModal';
 import { Button } from '@/app/components/button';
 import { useSharedUnity } from '@/src/adapters/unity/UnityProvider';
+import { AlgorithmState } from '@/src/domain/algorithm/algorithm.handler';
 import { AlgorithmConfig } from '@/src/domain/algorithm/algorithm.types';
-import { useCallback, useEffect, useState } from 'react';
+import { getAlgorithmHandler } from '@/src/domain/algorithm/handler.registry';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Unity } from 'react-unity-webgl';
 
@@ -15,8 +17,12 @@ interface AlgorithmVisualizerProps {
 
 function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisualizerProps) {
   const unityContext = useSharedUnity();
+
+  const handler = useMemo(() => getAlgorithmHandler(config.sceneName), [config.sceneName]);
+
+  const [algorithmState, setAlgorithmState] = useState<AlgorithmState>(handler?.initialState ?? {});
   
-  const [score, setScore] = useState(1);
+
   const [explanation, setExplanation] = useState<string>("");
   const [snippet, setSnippet] = useState<string>("");
   const [showSnippet, setShowSnippet] = useState(false);
@@ -24,18 +30,12 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
   const [isLoaded, setIsLoaded] = useState(false);
   const [currentScene, setCurrentScene] = useState<string>('');
 
-  //TODO: solve dynamic explanations for each algorithm
-  const getExplanation = useCallback((score: number): string => {
-    if (!config.explanationRules) return "No explanation available";
-    
-    if (score === 0) {
-      return config.explanationRules.empty;
+  useEffect(() => {
+    if (handler) {
+      setAlgorithmState(handler.initialState);
+      setExplanation(handler.getExplanation(handler.initialState));
     }
-    if (score >= 1 && score <= 10) {
-      return config.explanationRules.hasItems;
-    }
-    return config.explanationRules.default;
-  }, [config.explanationRules]);
+  }, [handler]);
 
   //load the specific scene based on sceneName
   useEffect( () => {
@@ -72,34 +72,36 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
     loadScene();
   }, [unityContext, unityContext.isLoaded, config.sceneName]);
 
-  // handlers - e.g. enqueue has idx = 0, dequeue has idx= 1
-  const handleOperation = useCallback((operationIndex: number) => (...parameters: any[]) => {
-    //update score based on operation
-    setScore(prevScore => {
-      const newScore = operationIndex === 0 ? prevScore + 1 : prevScore - 1;
+  // 
+  const handleOperation = useCallback((operationName: string) => (...params: any[]) => {
+    if (!handler) {
+      console.warn(`No handler found for ${config.sceneName}`);
+      return;
+    }
 
-      //use the calculated value immediately
-      setExplanation(getExplanation(newScore));
-      setSnippet(config.pseudocodes[operationIndex].code);
+    const result = handler.handleOperation(operationName, algorithmState, ...params);
+    
+    setAlgorithmState(result.newState);
+    setExplanation(handler.getExplanation(result.newState));
+    
+    if (result.snippet) {
+      setSnippet(result.snippet);
       setShowSnippet(true);
-      
-      return newScore;
-      }
-    );
-  }, [config, getExplanation]);
+    }
+  }, [handler, algorithmState, config.sceneName]);
   
   //register dispatch events from unity with handlers
   useEffect(() => {
-    const handlers = config.operations.map((operation, index) => ({
+    const handlers = config.operations.map((operation) => ({
       event: operation,
-      handler: handleOperation(index)
+      handler: handleOperation(operation)
     }));
 
     handlers.forEach(({event, handler}) => {
       unityContext.addEventListener(event, handler);
     })
 
-    console.log("event listeners registered");
+    console.log("event listeners registered", config.operations);
 
     return () => {
       handlers.forEach(({event, handler}) => {
@@ -132,18 +134,9 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
 
         {/* Side Panel */}
         <div className="w-80 flex flex-col gap-3 pointer-events-auto">
-          {/* Explanation Panel */}
-            <div className="p-4 rounded-2xl border-2 border-white/30 bg-black/50 backdrop-blur-sm text-primary" style={{ fontFamily: 'monospace' }}>
-            <p>{explanation}</p>
-            {showSnippet && (
-              <p className="text-white mt-2 text-sm"
-              dangerouslySetInnerHTML={{ __html: snippet }}
-              />
-            )}
-            </div>
           
           {/* Description Panel */}
-          <div className="flex-1 overflow-y-auto p-4 rounded-2xl text-white font-[family-name:var(--font-sf)] border-white/30 bg-white/10 backdrop-blur-sm">
+          <div className="flex-1 p-4 rounded-2xl text-white font-[family-name:var(--font-sf)] border-white/30 bg-white/10 backdrop-blur-sm">
             <h2 className='text-lg font-bold mb-2'>{config.title}</h2>
             <p className='text-sm' dangerouslySetInnerHTML={{ __html: config.description }} />
             <br/>
@@ -155,10 +148,19 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
 
             <Button 
               onClick={() => setIsModalOpen(true)}
-              className="mt-4 bg-white/20 hover:bg-white/30 text-white rounded-xl px-4 py-2 transition-all duration-300 cursor-pointer border border-white/30"
-            >
+              className="mt-4 bg-white/20 hover:bg-white/30 text-white rounded-xl px-4 py-2 transition-all duration-300 cursor-pointer border border-white/30 hover:rounded-none"
+              >
               More Info
             </Button>
+          </div>
+          {/* Explanation Panel */}
+          <div className="p-4 rounded-2xl border-2 border-white/30 bg-black/50 backdrop-blur-sm text-primary">
+          <code className='bg-purple-300/15 text-lg border-b-2 border-b-white/80'>{explanation}</code>
+          {showSnippet && (
+            <pre><code className="text-white mt-2 text-sm"
+            dangerouslySetInnerHTML={{ __html: snippet }}
+            /></pre>
+          )}
           </div>
         </div>
         

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Footer from "./components/Footer";
-import "./globals.css";
 import Header from "./components/Header";
+import "./globals.css";
 
 const sf = localFont({
   src: [
@@ -42,7 +42,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${sf.variable} flex flex-col h-dvh`}>
+      <body className={`${sf.variable} flex flex-col h-dvh bg-black`}>
         <Header />
         <main className="flex-1 flex flex-col pointer-events-none">
           {children}

@@ -4,9 +4,16 @@ auth0_id varchar(255) unique,
 email varchar(255) unique not null,
 password_hash text,
 username varchar(50) unique,
+is_admin boolean not null default false,
 created_at timestamp default current_timestamp,
 updated_at timestamp default current_timestamp
 );
+
+alter table userprofile
+add column if not exists is_admin boolean not null default false;
+
+update userprofile
+set is_admin = true where id=4;
 
 -- Notepad: 1 for each user
 create table if not exists notepad (

@@ -4,6 +4,8 @@ import { Loader2, Plus, Save, Trash2, X } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { Button } from "./button";
+import { ForwardRefEditor } from "./ForwardRefEditor";
+
 
 interface NotepadPage {
   id: number;
@@ -149,6 +151,7 @@ export default function NotepadModal({isOpen, onClose}: NotepadModalProps) {
         headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({title: title || 'Untitled', content}),
       });
+      console.log(content);
       
       if (!response.ok) {
         throw new Error('Failed ot save page');
@@ -220,15 +223,15 @@ export default function NotepadModal({isOpen, onClose}: NotepadModalProps) {
 
   // portal ro render the notepad
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 flex items-center justify-center">
       {/* backdrop */}
       <div onClick={handleClose} className="absolute inset-0 bg-black/20 backdrop-blur-sm"/>
         {/* modal container */}
-        <div className="relative z-10 w-full max-w-4xl h-[80vh] mx-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl overflow-hidden flex flex-col">
+        <div className="relative w-full max-w-4xl h-[80vh] mx-4 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl overflow-hidden flex flex-col">
           {/* header */}
           <div className="flex items-center justify-between p-4 border-b border-white/20">
             <h2 className="text-xl font-semibold text-white">
-              Notepad {hasUnsavedChanges && <span className="text-yellow-400 ml">⬤</span>}
+              Notepad {hasUnsavedChanges && <span className="text-yellow-400 ml text-sm">⬤ You have unsaved changes</span>}
             </h2>
             <button
               onClick={handleClose}
@@ -287,10 +290,18 @@ export default function NotepadModal({isOpen, onClose}: NotepadModalProps) {
                 type='text' value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Page title..."
                 className="w-full px-3 py-2 mb-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/30"
               />
+
+
+
               {/* content area */}
-              <textarea value={content} onChange={(e) => setContent(e.target.value)} placeholder="Page content..."
+              {/* <textarea value={content} onChange={(e) => setContent(e.target.value)} placeholder="Page content..."
                 className="flex-1 w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 resize-none focus:outline-none focus:ring-2 focus:ring-white/30"
-              />
+              /> */}
+              <article className="overflow-y-auto rounded-lg">
+              <ForwardRefEditor key={currentPageNumber} markdown={content} className="text-white" onChange={(e) => setContent(e)}/>
+
+              </article>
+
               {/* buttons */}
               <div className="flex justify-between items-center mt-4">
                 {/* delete */}

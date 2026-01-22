@@ -1,4 +1,3 @@
-import Dither from '@/app/components/background/Dither';
 import { auth0 } from '@/lib/auth0';
 import Color from 'color';
 import AlgoCard from './components/AlgoCard';
@@ -45,7 +44,7 @@ export default async function Home() {
   return (
     <div className="relative min-h-screen overflow-x-hidden">
       {/* Dither Background: Fixed position to stay in the background */}
-      <div className="fixed inset-0 z-0">
+      {/* <div className="fixed inset-0 z-0">
         <Dither
           waveColor={[0.5, 0.5, 0.5]}
           disableAnimation={false}
@@ -56,7 +55,7 @@ export default async function Home() {
           waveFrequency={2}
           waveSpeed={0.05}
         />
-      </div>
+      </div> */}
 
       {/* Main Content: Positioned relatively to sit on top of the background */}
       <div className="relative pointer-events-none">
@@ -69,6 +68,7 @@ export default async function Home() {
             <h1 className='z-10 tracking'>
               PatternView
             </h1>
+            <br/>
           </div>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 md:gap-8 w-full">

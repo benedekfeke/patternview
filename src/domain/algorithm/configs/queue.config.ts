@@ -23,19 +23,17 @@ export const queueConfig: AlgorithmConfig = {
     { text: '.' }
   ],
 
-  pseudocodes: [
-    {
-      title: "Enqueue Operation",
-      code: `function enqueue(queue, item) {<br />&nbsp;&nbsp;queue.push(item);<br />&nbsp;&nbsp;return queue;<br />}`,
+  pseudocodes: {
+    Enqueue: {
+      title: "Add item to queue",
+      code: `function Enqueue(item) {<br/>&nbsp;&nbsp;queue.push(item);<br/>}`
     },
-    {
-      title: "Dequeue Operation",
-      code: `function dequeue(queue) {<br />&nbsp;&nbsp;if (queue.length === 0) {<br />&nbsp;&nbsp;&nbsp;&nbsp;throw new Error("Queue is empty");<br />&nbsp;&nbsp;}<br />&nbsp;&nbsp;return queue.shift();<br />}`,
-    },
-    //TODO: ADD MORE LATER
-  ],
+    Dequeue: {
+      title: "Remove item from queue",
+      code: `function Dequeue() {<br/>&nbsp;&nbsp;return queue.shift();<br/>}`
+    }
+  },
   operations: ['Enqueue', 'Dequeue'],
-  // Define explanation rules as data instead of function
   explanationRules: {
     empty: "The queue is empty. Dequeue operation cannot be performed.",
     hasItems: "Queue has items. All operations can be performed.",

@@ -29,17 +29,17 @@ export default function AlgoCard({lottie, slug, name, isLoggedIn}: AlgoCardProps
   }, []);
 
   return (
-    <Card className="relative z-10 max-w-52 hover:mx-12 max-h-100 transition-all duration-200 hover:bg-blue-300/30 hover:text-card bg-accent/20 text-card-foreground backdrop-blur-xl pointer-events-auto overflow-hidden"
+    <Card className="relative  max-w-52 hover:mx-12 max-h-100 transition-all duration-200 hover:bg-primary/30 hover:text-card bg-accent/20 text-card-foreground hover:rounded-none backdrop-blur-xl pointer-events-auto overflow-hidden"
     onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}
     >
       <CardHeader>
-        <CardTitle className="z-10 text-center text-2xl font-bold">{name}</CardTitle>
+        <CardTitle className=" text-center text-2xl font-bold">{name}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="flex justify-center">
           {/* Lottie animation */}
           {lottie && (
-            <div className={`z-0 w-full h-full object-cover rounded-full transition-all duration-200 ease-in-out bg-`}>
+            <div className={`w-full h-full object-cover rounded-full transition-all duration-200 ease-in-out bg-`}>
               <DotLottieReact src={lottie} loop dotLottieRefCallback={dotLottieRefCallback}
               onMouseEnter={() => dotLottie?.play()}
               onMouseLeave={() => dotLottie?.pause()}  
@@ -49,10 +49,10 @@ export default function AlgoCard({lottie, slug, name, isLoggedIn}: AlgoCardProps
           )}
         </div>
       </CardContent>
-      <CardFooter className="z-10 transition-all duration-150 ease">
+      <CardFooter className=" transition-all duration-150 ease">
         {isLoggedIn ? (
           <Link href = {`algorithms/${slug}`} className="w-full">
-            <Button className="w-full bg-purple-300 text-black hover:cursor-pointer hover:bg-purple-800 hover:text-white transition-all duration-100">
+            <Button className="w-full bg-purple-300 text-black hover:cursor-pointer hover:bg-purple-800 hover:text-white hover:rounded-none transition-all duration-100">
               View Algorithm
             </Button>
           </Link>
@@ -63,7 +63,7 @@ export default function AlgoCard({lottie, slug, name, isLoggedIn}: AlgoCardProps
               <span>Locked</span>
             </div>
             <Link href="/auth/login" className="w-full">
-              <Button className="w-full bg-gray-500 text-white hover:cursor-pointer hover:bg-gray-600 transition-all duration-100">
+              <Button className="w-full bg-gray-500 text-white hover:cursor-pointer hover:bg-gray-600 hover:rounded-none transition-all duration-100">
                 Log in to access
               </Button>
             </Link>

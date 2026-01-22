@@ -9,7 +9,8 @@ import NotepadModal from './NotepadModal';
 type User = {
   sub?: string,
   email?: string,
-  username?: string
+  username?: string,
+  isAdmin?: boolean
 };
 
 export default function HeaderClient({user}: {user: User | null}) {
@@ -62,7 +63,7 @@ export default function HeaderClient({user}: {user: User | null}) {
           {/* notepad -modal */}
           {user && (
             <Button onClick={() => setIsNotepadOpen(true)}
-            className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-md bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 transition-colors hover:bg-white hover:text-black"
+            className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-lg bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 hover:bg-white/30 transition-all duration-300 hover:rounded-none"
             >
               <BookOpen size={16} className='mr-2' />
               Notepad
@@ -71,30 +72,31 @@ export default function HeaderClient({user}: {user: User | null}) {
           )}
 
           {/* These links have their own backgrounds and will appear on top of the Dither component */}
+          {user?.isAdmin && (
           <Link
             href="/dashboard"
-            className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-md bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 transition-colors hover:bg-white hover:text-black"
+            className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-lg bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 hover:bg-white/30 transition-all duration-300 hover:rounded-none"
             prefetch={false}
             >
             Dashboard
-          </Link>
+          </Link>)}
           <Link
             href={`/test`}
-            className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-md bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 transition-colors hover:bg-white hover:text-black"
+            className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-lg bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 hover:bg-white/30 transition-all duration-300 hover:rounded-none"
             prefetch={false}
             >
             TestPage
           </Link>
           <Button
             onClick={handleSync}
-            className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-md bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 transition-colors hover:bg-white hover:text-black"
+            className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-lg bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 hover:bg-white/30 transition-all duration-300 hover:rounded-none"
             >
             Sync with local DB
           </Button>
           {!user && (
             <Link
             href="/auth/login"
-            className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-md bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 transition-colors hover:bg-white hover:text-black"
+            className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-lg bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 hover:bg-white/30 transition-all duration-300 hover:rounded-none"
             prefetch={false}
             >
               Login
@@ -104,13 +106,13 @@ export default function HeaderClient({user}: {user: User | null}) {
             <>
               <Link
                 href="/profile"
-                className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-md bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 transition-colors hover:bg-white hover:text-black"
+                className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-lg bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 hover:bg-white/40 transition-all duration-300 hover:rounded-none"
                 >
                 Profile
               </Link>
               <Link
                 href="/auth/logout"
-                className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-md bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 transition-colors hover:bg-white hover:text-black"
+                className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-lg bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 hover:bg-white/30 transition-all duration-300 hover:rounded-none"
                 >
                 Logout
               </Link>

@@ -20,6 +20,6 @@ export interface AlgorithmConfig {
   description: string;
   modalDescription?: DescriptionSegment[];
   operations: string[];
-  pseudocodes: Pseudocode[];
+  pseudocodes: Record<string, Pseudocode>;
   explanationRules?: ExplanationRules;
 }
