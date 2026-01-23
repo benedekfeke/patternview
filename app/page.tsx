@@ -16,8 +16,8 @@ const algorithms = [
     // image: "/quick_sort.jpg",
   },
   {
-    slug: "merge-sort",
-    name: "Sorting",
+    slug: "radixSort",
+    name: "RadixSort",
     lottie: "/sorting.lottie"
     // image: "/quick_sort.jpg",
   },

@@ -4,7 +4,7 @@ import { AlgorithmConfig } from '../algorithm.types';
 export const radixSortConfig: AlgorithmConfig = {
   sceneName: 'RadixSort',
   title: 'Sorting Algorithm',
-  description: `<a href='https://en.wikipedia.org/wiki/Pathfinding' class="link-hover">Radix Sort</a> algorithms find the shortest path between two points in a graph or grid.`,
+  description: `<a href='https://en.wikipedia.org/wiki/Pathfinding' class="link-hover">Radix Sort</a> is considered one of the fastests sorting algorithms present.`,
   modalDescription: [
     { text: 'Pathfinding' , link: 'https://en.wikipedia.org/wiki/Pathfinding' },
     { text: ' or pathing is the search, by a computer application, for the shortest route between two points. It is a more practical variant of solving ' },

@@ -48,6 +48,11 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
       return;
     }
 
+    // TODO: Send message with zip codes(5 digit numbers to init letters)
+    if (config.sceneName === 'RadixSort') {
+      // unityContext.sendMessage("")
+    }
+
     const loadScene = async() => {
       try {
 
@@ -148,12 +153,6 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
           duration-200">
             <h2 className='text-lg font-bold mb-2'>{config.title}</h2>
             <p className='text-sm' dangerouslySetInnerHTML={{ __html: config.description }} />
-            <br/>
-            <ul className="list-disc pl-5 text-sm">
-              {config.operations.map((op, idx) => (
-                <li key={idx}>{op}: {config.pseudocodes[idx]?.title || 'Operation'}</li>
-              ))}
-            </ul>
 
             <Button 
               onClick={() => setIsModalOpen(true)}
@@ -167,7 +166,7 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
           duration-200">
           <code className='bg-purple-300/15 text-purple-200 text-lg border-b-white/80'>{explanation}</code>
           {showSnippet && (
-            <>
+            <div className='overflow-auto'>
             <pre className="mt-2 border-t border-white/30" 
             data-tooltip-content={`${snippetTooltip}`} 
             data-tooltip-id='my-tooltip' data-tooltip-place='right' data-tooltip-delay-hide={400}>
@@ -178,7 +177,7 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
             </pre>
             <Tooltip id='my-tooltip' clickable className="custom-rt-tooltip"
               classNameArrow="custom-rt-tooltip-arrow" />
-            </>
+            </div>
           )}
           </div>
         </div>
