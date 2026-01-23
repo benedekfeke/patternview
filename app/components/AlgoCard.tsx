@@ -29,21 +29,21 @@ export default function AlgoCard({lottie, slug, name, isLoggedIn}: AlgoCardProps
   }, []);
 
   return (
-    <Card className="relative  max-w-52 hover:mx-12 max-h-100 transition-all duration-200 hover:bg-primary/30 hover:text-card bg-accent/20 text-card-foreground hover:rounded-none backdrop-blur-xl pointer-events-auto overflow-hidden"
+    <Card className={`relative max-w-60 rounded-4xl hover:mx-12 max-h-100 transition-all duration-400  hover:text-card text-card-foreground hover:rounded-none backdrop-blur-xl pointer-events-auto overflow-hidden bg-white/30 ${isLoggedIn ? "hover:bg-radial-[at_50%_75%] from-sky-200 via-blue-400 to-indigo-900 to-90% hover:opacity-100" : ""}`}
     onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}
     >
       <CardHeader>
         <CardTitle className=" text-center text-2xl font-bold">{name}</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="flex justify-center">
+        <div className="flex">
           {/* Lottie animation */}
           {lottie && (
-            <div className={`w-full h-full object-cover rounded-full transition-all duration-200 ease-in-out bg-`}>
+            <div className={`w-full h-full object-cover transition-all duration-200 ease-in-out`}>
               <DotLottieReact src={lottie} loop dotLottieRefCallback={dotLottieRefCallback}
               onMouseEnter={() => dotLottie?.play()}
               onMouseLeave={() => dotLottie?.pause()}  
-              className="w-full my-4 h-full object-cover hover:scale-200 transition-all"/>
+              className="w-full my-4 h-full object-cover transition-all"/>
             </div>
             
           )}

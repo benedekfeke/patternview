@@ -47,6 +47,7 @@ export const queueHandler: AlgorithmHandler = {
           },
           explanation: '',
           snippet: queueConfig.pseudocodes.Enqueue?.code,
+          tooltip: queueConfig.pseudocodes.Enqueue?.tooltip,
         };
       case 'Dequeue':
         return {
@@ -57,6 +58,7 @@ export const queueHandler: AlgorithmHandler = {
           },
           explanation: '',
           snippet: queueConfig.pseudocodes.Dequeue?.code,
+          tooltip: queueConfig.pseudocodes.Dequeue?.tooltip,
         };
       default:
         return {newState: state, explanation: 'Unknown operation'};

@@ -26,11 +26,15 @@ export const queueConfig: AlgorithmConfig = {
   pseudocodes: {
     Enqueue: {
       title: "Add item to queue",
-      code: `function Enqueue(item) {<br/>&nbsp;&nbsp;queue.push(item);<br/>}`
+      code: `function Enqueue(item) {<br/>&nbsp;&nbsp;queue.push(item);<br/>}`,
+      tooltip: `When you enqueue, you place a new element at the back (rear) of the queue.
+      Analogy: Imagine joining a line at a ticket counter. You go to the end of the line and wait for your turn.`
     },
     Dequeue: {
       title: "Remove item from queue",
-      code: `function Dequeue() {<br/>&nbsp;&nbsp;return queue.shift();<br/>}`
+      code: `function Dequeue() {<br/>&nbsp;&nbsp;return queue.shift();<br/>}`,
+      tooltip: `When you dequeue, you remove the element at the front of the queue.
+      Analogy: The person at the front of the line gets served and leaves the line.`
     }
   },
   operations: ['Enqueue', 'Dequeue'],

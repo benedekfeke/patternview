@@ -6,6 +6,7 @@ export interface DescriptionSegment {
 export interface Pseudocode {
   title: string;
   code: string;
+  tooltip?: string;
 }
 
 export interface ExplanationRules {

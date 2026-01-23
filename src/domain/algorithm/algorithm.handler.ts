@@ -6,6 +6,7 @@ export interface OperationResult {
   newState: AlgorithmState;
   explanation: string;
   snippet?: string;
+  tooltip?: string;
 }
 
 export interface AlgorithmHandler {

@@ -1,15 +1,16 @@
 'use client';
 import DescriptionModal from '@/app/components/DescriptionModal';
 import { Button } from '@/app/components/button';
+import '@/app/components/css/reactTooltip.css';
 import { useSharedUnity } from '@/src/adapters/unity/UnityProvider';
 import { AlgorithmState } from '@/src/domain/algorithm/algorithm.handler';
 import { AlgorithmConfig } from '@/src/domain/algorithm/algorithm.types';
 import { getAlgorithmHandler } from '@/src/domain/algorithm/handler.registry';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { Tooltip } from 'react-tooltip';
+import 'react-tooltip/dist/react-tooltip.css';
 import { Unity } from 'react-unity-webgl';
-
-
 interface AlgorithmVisualizerProps {
   config: AlgorithmConfig,
   className?: string;
@@ -18,13 +19,14 @@ interface AlgorithmVisualizerProps {
 function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisualizerProps) {
   const unityContext = useSharedUnity();
 
-  const handler = useMemo(() => getAlgorithmHandler(config.sceneName), [config.sceneName]);
+  const handler = useMemo(() => getAlgorithmHandler(config.sceneName), [config.sceneName]); 
 
   const [algorithmState, setAlgorithmState] = useState<AlgorithmState>(handler?.initialState ?? {});
   
 
   const [explanation, setExplanation] = useState<string>("");
   const [snippet, setSnippet] = useState<string>("");
+  const [snippetTooltip, setSnippetTooltip] = useState<string>("Not defined");
   const [showSnippet, setShowSnippet] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
@@ -88,6 +90,9 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
       setSnippet(result.snippet);
       setShowSnippet(true);
     }
+    if (result.tooltip) {
+      setSnippetTooltip(result.tooltip);
+    }
   }, [handler, algorithmState, config.sceneName]);
   
   //register dispatch events from unity with handlers
@@ -110,8 +115,11 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
     }
   }, [unityContext, config.operations, handleOperation]);
 
+
+
   //return the component
   return (
+    
     <div className={`flex flex-col h-full ${className}`}>
       {!isLoaded && (
         <div className='flex items-center justify-center h-full text-white'>
@@ -122,7 +130,7 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
       <div className="flex flex-row flex-1 gap-4 pointer-events-auto">
         {/* Unity container - 4:3 aspect ratio (Game) */}
         <div className="flex-1 flex items-center justify-center">
-          <div className='relative w-full h-0 pb-[75%] max-h-[calc(100vh-200px)]'>
+          <div className='relative w-full h-0 pb-[75%] max-h-[calc(100vh-100px)]'>
             <div className='absolute inset-0 rounded-2xl overflow-hidden shadow-lg'>
               <Unity 
                 unityProvider={unityContext.unityProvider} 
@@ -133,10 +141,11 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
         </div>
 
         {/* Side Panel */}
-        <div className="w-80 flex flex-col gap-3 pointer-events-auto">
+        <div className="w-80 flex flex-col gap-3 pointer-events-auto justify-center">
           
           {/* Description Panel */}
-          <div className="flex-1 p-4 rounded-2xl text-white font-[family-name:var(--font-sf)] border-white/30 bg-white/10 backdrop-blur-sm">
+          <div className=" p-4 rounded-2xl text-white font-[family-name:var(--font-sf)]  bg-white/10 hover:outline-1 hover:rounded-none hover:outline-white transition-all
+          duration-200">
             <h2 className='text-lg font-bold mb-2'>{config.title}</h2>
             <p className='text-sm' dangerouslySetInnerHTML={{ __html: config.description }} />
             <br/>
@@ -148,18 +157,28 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
 
             <Button 
               onClick={() => setIsModalOpen(true)}
-              className="mt-4 bg-white/20 hover:bg-white/30 text-white rounded-xl px-4 py-2 transition-all duration-300 cursor-pointer border border-white/30 hover:rounded-none"
+              className="mt-4 bg-white/20 hover:bg-black text-white rounded-2xl px-4 py-2 transition-all duration-300 cursor-pointer border border-white/30 hover:rounded-none"
               >
               More Info
             </Button>
           </div>
           {/* Explanation Panel */}
-          <div className="p-4 rounded-2xl border-2 border-white/30 bg-black/50 backdrop-blur-sm text-primary">
-          <code className='bg-purple-300/15 text-lg border-b-2 border-b-white/80'>{explanation}</code>
+          <div className="p-4 rounded-2xl border-2 border-dashed border-white bg-black/50 backdrop-blur-sm text-primary hover:border-2 hover:rounded-none transition-all
+          duration-200">
+          <code className='bg-purple-300/15 text-purple-200 text-lg border-b-white/80'>{explanation}</code>
           {showSnippet && (
-            <pre><code className="text-white mt-2 text-sm"
-            dangerouslySetInnerHTML={{ __html: snippet }}
-            /></pre>
+            <>
+            <pre className="mt-2 border-t border-white/30" 
+            data-tooltip-content={`${snippetTooltip}`} 
+            data-tooltip-id='my-tooltip' data-tooltip-place='right' data-tooltip-delay-hide={400}>
+              <code
+                className="text-white mt-2 text-sm"
+                dangerouslySetInnerHTML={{ __html: snippet }}
+              />
+            </pre>
+            <Tooltip id='my-tooltip' clickable className="custom-rt-tooltip"
+              classNameArrow="custom-rt-tooltip-arrow" />
+            </>
           )}
           </div>
         </div>
@@ -175,8 +194,8 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex justify-between items-center mb-4 pointer-events-auto">
-                <h2 className="text-2xl font-bold text-accent border-1 rounded-4xl px-4">{config.title}</h2>
-                <Button size={'sm'} className='rounded-4xl w-max hover:cursor-pointer hover:text-destructive hover:shadow-destructive' variant={'outline'} onClick={() => setIsModalOpen(false)}>×</Button>
+                <h2 className="text-2xl font-bold text-accent border-1 rounded-2xl px-4">{config.title}</h2>
+                <Button size={'sm'} className='rounded-2xl w-max hover:cursor-pointer hover:text-destructive hover:shadow-destructive' variant={'outline'} onClick={() => setIsModalOpen(false)}>×</Button>
               </div>
               <div className="text-black pointer-events-auto">
                 {config.modalDescription ? (

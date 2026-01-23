@@ -18,31 +18,31 @@ export const radixSortConfig: AlgorithmConfig = {
   ],
   pseudocodes: {
     OnRadixStateChanged: {
-      title: "Reset game with current graph",
+      title: "State of the algorithm has changed",
       code: ``
     },
     OnDigitSelected: {
-      title: "Generate a new graph with randomized nodes and connections",
+      title: "Selected the rightmost digit → Least Significant Digit (LSD)",
       code: ``
     },
     OnLetterMovedToBin: {
-      title: "Step until the goal node is not found",
+      title: "Moving the letters into bins(boards)...",
       code: ``
     },
     OnLetterCollected: {
-      title: "No path exists further",
+      title: "Collecting letters from bins(boards)...",
       code: ``
     },
     OnPassComplete: {
-      title: "Algorithm found optimal path",
+      title: "",
       code: ``
     },
     OnRadixSortComplete: {
-      title: "Player found a path",
+      title: "Sorting is complete",
       code: ``
     },
-    OnLetterInitialized: {
-      title: "Compare paths",
+    OnLettersInitialized: {
+      title: "Initialized letters to sort.",
       code: ``
     }
   },

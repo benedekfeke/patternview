@@ -1,0 +1,20 @@
+/* ...existing code... */
+
+.mdxeditor-popup-container [contenteditable] a,
+.mdxeditor-popup-container .prose a {
+  color: #2563eb !important;       /* blue-600 */
+  text-decoration: underline !important;
+  text-underline-offset: 2px;
+}
+
+.mdxeditor-popup-container [contenteditable] a:hover,
+.mdxeditor-popup-container .prose a:hover {
+  color: #1d4ed8 !important;       /* blue-700 */
+}
+
+/* ensure links remain visible on dark/light backgrounds */
+.mdxeditor-popup-container [contenteditable] a,
+.mdxeditor-popup-container .prose a {
+  -webkit-text-decoration-color: currentColor;
+  text-decoration-color: currentColor;
+}
