@@ -36,9 +36,9 @@ export default function TextBox({label, content, className = "", editable = fals
   }
 
   return (
-    <div className={`flex flex-col gap-2 p-3 bg-white/5 rounded-lg border border-white/10 backdrop-blur-md ${className} pointer-events-auto w-full`}>
+    <div className={`flex flex-col gap-2 p-3 bg-white/30 rounded-2xl overflow-hidden hover:rounded-none trasnition-all duration-200 [&_button]:hover:rounded-none border-2 border-black ${className} pointer-events-auto w-full`}>
       <div className="flex items-center justify-between">
-        <span className="font-medium text-gray-400 text-sm">
+        <span className="font-medium text-gray-800 text-sm">
           {label}
         </span>
         
@@ -68,7 +68,7 @@ export default function TextBox({label, content, className = "", editable = fals
           editable && (
             <button
               onClick={() => setIsEditing(true)}
-              className="p-1.5 bg-purple-500/20 text-purple-400 rounded-md border border-purple-500/30 hover:bg-purple-500/40 transition-all duration-150 hover:cursor-pointer shrink-0"
+              className="p-1.5 bg-purple-500/20 text-purple-300 rounded-md border border-purple-500/30 hover:bg-purple-500/40 transition-all duration-150 hover:cursor-pointer shrink-0 "
             >
               <Pencil size={14} />
             </button>

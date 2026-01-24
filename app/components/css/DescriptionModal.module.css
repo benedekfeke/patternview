@@ -23,6 +23,7 @@
 }
 .paragraph {
   margin: 0;
+  overflow-wrap: break-word;
 }
 .link {
   color: #2563eb;

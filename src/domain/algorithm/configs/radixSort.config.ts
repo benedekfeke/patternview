@@ -4,17 +4,13 @@ import { AlgorithmConfig } from '../algorithm.types';
 export const radixSortConfig: AlgorithmConfig = {
   sceneName: 'RadixSort',
   title: 'Sorting Algorithm',
-  description: `<a href='https://en.wikipedia.org/wiki/Pathfinding' class="link-hover">Radix Sort</a> is considered one of the fastests sorting algorithms present.`,
+  description: `<a href='https://en.wikipedia.org/wiki/Pathfinding' class="link-hover">Radix Sort</a> is considered one of the fastests sorting algorithms. It avoids comparison by creating and <a href='https://en.wikipedia.org/wiki/Distribution_sort' class="link-hover">distributing</a> elements into buckets (or bins) according to their <a href='https://en.wikipedia.org/wiki/Radix' class="link-hover">radix</a>. This bucketing proces is repeated for each digit, while preserving the ordering of the prior step, until all digits have been considered. Radix sort can be applied to data that can be sorted <a href='https://en.wikipedia.org/wiki/Lexicographical_order' class="link-hover">lexicographically</a>.`,
   modalDescription: [
-    { text: 'Pathfinding' , link: 'https://en.wikipedia.org/wiki/Pathfinding' },
-    { text: ' or pathing is the search, by a computer application, for the shortest route between two points. It is a more practical variant of solving ' },
-    { text: 'mazes', link: 'https://en.wikipedia.org/wiki/Maze' },
-    { text: '. This field of research is based heavily on ' },
-    { text: "Dijkstra's algorithm", link: 'https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm' },
-    { text: ' for finding the shortest path on a weighted graph. ' },
-    { text: '<br/><br/>Pathfinding is closely related to the shortest path problem within ' },
-    { text: 'graph theory', link: 'https://en.wikipedia.org/wiki/Graph_theory' },
-    { text: ', which examines how to identify the path that best meets some criteria between two points in a large network.' }
+    {text: 'Radix sort can be implemented to start at either the '},
+    { text: 'most significant digit (MSD)' , link: 'https://en.wikipedia.org/wiki/Most_significant_digit' },{text:' or'},
+    { text: ' least significant digit(LSD) ', link: 'https://en.wikipedia.org/wiki/Least_significant_digit' }, {text:' - more stable. '},
+    {text: "The working principle", link: "https://en.oi-wiki.org/basic/radix-sort/"},{text:" is that the algorithm splits the elements to be sorted into  keywords (when comparing two elements, first compare the first keyword, if they are the same, then compare the second keyword...), and then stably sort the  th keywords, the k-1 -th keywords, and then sort the k-2 -th keywords... Finally, sort the first keywords stably, and the stable sorting of the entire sequence is completed."}, {text: ' Generally, radix sorting is faster than sorting comparison-based algorithm (e.g. '},{text:'quicksort',link:'https://en.oi-wiki.org/basic/quick-sort/'}, {text:"). However, because of the need of extra memory, when the memory space is low, in-place algorithm (e.g. quicksort) may be a better choice."},
+    {text: '<br/><br/>General pseudocode: <br/><ol><li>1. Input. An array <i>A</i> consisting of <i>n</i> elements, where each element has <i>k</i> keys.</li><li>2. Output. Array <i>A</i> will be sorted in nondecreasing order stably.</li><li>3. Method.</li><li>4. for <i>i ← k</i> down to 1 <br/><pre>  sort <i>A</i> into nondecreasing order by the <i>i</i>-th key stably.</pre></ol>'}
   ],
   pseudocodes: {
     OnRadixStateChanged: {

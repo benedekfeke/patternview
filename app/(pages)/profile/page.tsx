@@ -4,6 +4,7 @@ import TextBox from "@/app/components/TextBox";
 import { useUser } from "@auth0/nextjs-auth0";
 import { Calendar, Lock, Mail, User } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Tooltip } from "react-tooltip";
 
 export default function Profile() {
   const { user, isLoading } = useUser();
@@ -89,18 +90,6 @@ export default function Profile() {
   if (!user) {
     return (
       <div className="relative min-h-screen overflow-hidden">
-        {/* <div className="fixed inset-0 z-0">
-          <Dither
-            waveColor={[0.5, 0.5, 0.5]}
-            disableAnimation={false}
-            enableMouseInteraction={true}
-            mouseRadius={0.3}
-            colorNum={5}
-            waveAmplitude={0.53}
-            waveFrequency={2}
-            waveSpeed={0.05}
-          />
-        </div> */}
         <div className="relative z-10 flex justify-center items-center min-h-screen">
           <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-lg p-8 text-center">
             <p className="text-gray-200 mb-4">You are not logged in.</p>
@@ -118,36 +107,23 @@ export default function Profile() {
 
   return (
     <div className="relative min-h-screen overflow-hidden">
-      {/* Dither Background */}
-      {/* <div className="fixed inset-0 -z-10">
-        <Dither
-          waveColor={[0.5, 0.5, 0.5]}
-          disableAnimation={false}
-          enableMouseInteraction={true}
-          mouseRadius={0.3}
-          colorNum={5}
-          waveAmplitude={0.53}
-          waveFrequency={2}
-          waveSpeed={0.05}
-        />
-      </div> */}
 
       {/* Main Content */}
-      <div className="relative -z-5 flex justify-center items-center min-h-screen p-4">
+      <div className="relative flex justify-center items-center min-h-screen p-4 pointer-events-auto">
         <div className="w-full max-w-lg">
           {/* Profile Card */}
-          <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl overflow-hidden shadow-2xl">
+          <div className="bg-white/10 backdrop-blur-xl border border-black rounded-4xl overflow-hidden shadow-2xl">
             {/* Header with Avatar */}
-            <div className="relative h-32 bg-gradient-to-br from-purple-500/30 to-blue-500/30">
-              <div className="absolute -bottom-12 left-1/2 -translate-x-1/2">
+            <div className="relative h-32 bg-gradient-to-b from-black/50 to-white border-b border-black">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 shadow-2xl shadow-black rounded-full">
                 {user.picture ? (
                   <img
-                    className="w-24 h-24 rounded-full border-4 border-white/20 object-cover shadow-lg"
+                    className="w-24 h-24 rounded-full border-2 border-black object-cover shadow-lg"
                     src={user.picture}
                     alt={userData?.username || user.name || 'User profile'}
                   />
                 ) : (
-                  <div className="w-24 h-24 rounded-full border-4 border-white/20 bg-purple-500/50 flex items-center justify-center">
+                  <div className="w-24 h-24 rounded-full border-4 border-black bg-purple-500/50 flex items-center justify-center">
                     <User size={40} className="text-white" />
                   </div>
                 )}
@@ -185,12 +161,17 @@ export default function Profile() {
                 
                 <div className="flex items-start gap-3">
                   <Calendar size={18} className="text-purple-400 shrink-0 mt-3" />
-                  <TextBox 
-                    label="Age" 
-                    content={userData?.age || ''} 
-                    editable={true}
-                    onSave={(value) => handleUpdateField('age', value)} 
-                  />
+                  <div className='w-full' 
+                  data-tooltip-id='age-tooltip'
+                  data-tooltip-content="Your age is used for analytical purposes only" data-tooltip-place='top'>
+                    <TextBox
+                      label="Age"
+                      content={userData?.age || ''}
+                      editable={true}
+                      onSave={(value) => handleUpdateField('age', value)}
+                    />
+                  </div>
+                  <Tooltip id='age-tooltip'/>
                 </div>
               </div>
             </div>

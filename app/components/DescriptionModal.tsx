@@ -1,3 +1,4 @@
+import DOMPurify from 'dompurify';
 import { FunctionComponent } from 'react';
 import styles from './css/DescriptionModal.module.css';
 
@@ -28,7 +29,7 @@ const DescriptionModal: FunctionComponent<ModalDescriptionProps> = ({ segments }
                   <span className={styles.underline}>{segment.text}</span>
                 </a>
               ) : (
-                <span key={index}>{segment.text}</span>
+                <span key={index} dangerouslySetInnerHTML={{__html:DOMPurify.sanitize(segment.text)}}/>
               )
             ))}
           </p>

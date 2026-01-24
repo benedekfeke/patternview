@@ -9,7 +9,7 @@ export default async function AlgorithmPage({ params }: {
   const config = getAlgorithmConfig(slug);
 
   return (
-    <div className="flex-1 flex flex-col bg-black">
+    <div className="flex-1 flex flex-col">
 
       <div className="flex-1 flex items-center justify-center pb-4">
         {config ? (

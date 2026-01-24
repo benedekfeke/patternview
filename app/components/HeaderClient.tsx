@@ -46,7 +46,7 @@ export default function HeaderClient({user}: {user: User | null}) {
   // For local testing, use the button below
 
   return (
-    <div className='w-full font-[family-name:var(--font-sf)] pointer-events-auto bg-black'>
+    <div className='w-full font-[family-name:var(--font-sf)] pointer-events-auto '>
 
     <div className="container mx-auto px-4 md:px-6 lg:px-8">
       <header className="flex h-14 w-full shrink-0 items-center px-4 md:px-6 lg:px-8">

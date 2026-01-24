@@ -56,16 +56,17 @@ export default async function Home() {
           waveSpeed={0.05}
         />
       </div> */}
+      
 
       {/* Main Content: Positioned relatively to sit on top of the background */}
-      <div className="relative pointer-events-none">
+      <div className="relative">
         <div className="w-full max-w-screen-2xl mx-auto p-2 md:p-8 lg:p-12 font-[family-name:var(--font-sf)]">
           {/* <TypewriterHeading
             text="Currently implemented algorithms"
             className="text-3xl font-bold text-white mb-12 text-center"
           /> */}
           <div className='w-full p-5 font-extrabold justify-self-center text-center text-8xl text-accent  '>
-            <h1 className='z-10 tracking'>
+            <h1 className='z-10 tracking text-backdrop-invert'>
               PatternView
             </h1>
             <br/>

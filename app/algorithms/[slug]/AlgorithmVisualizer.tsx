@@ -6,6 +6,7 @@ import { useSharedUnity } from '@/src/adapters/unity/UnityProvider';
 import { AlgorithmState } from '@/src/domain/algorithm/algorithm.handler';
 import { AlgorithmConfig } from '@/src/domain/algorithm/algorithm.types';
 import { getAlgorithmHandler } from '@/src/domain/algorithm/handler.registry';
+import DOMPurify from 'dompurify';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Tooltip } from 'react-tooltip';
@@ -152,7 +153,7 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
           <div className=" p-4 rounded-2xl text-white font-[family-name:var(--font-sf)]  bg-white/10 hover:outline-1 hover:rounded-none hover:outline-white transition-all
           duration-200">
             <h2 className='text-lg font-bold mb-2'>{config.title}</h2>
-            <p className='text-sm' dangerouslySetInnerHTML={{ __html: config.description }} />
+            <p className='text-sm' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(config.description) }} />
 
             <Button 
               onClick={() => setIsModalOpen(true)}
@@ -162,9 +163,9 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
             </Button>
           </div>
           {/* Explanation Panel */}
-          <div className="p-4 rounded-2xl border-2 border-dashed border-white bg-black/50 backdrop-blur-sm text-primary hover:border-2 hover:rounded-none transition-all
+          <div className="p-4 rounded-2xl border-2 border-dashed border-white  text-primary hover:border-2 hover:rounded-none transition-all
           duration-200">
-          <code className='bg-purple-300/15 text-purple-200 text-lg border-b-white/80'>{explanation}</code>
+          <code className=' text-blue-200 text-lg border-b-white/80'>{explanation}</code>
           {showSnippet && (
             <div className='overflow-auto'>
             <pre className="mt-2 border-t border-white/30" 
@@ -172,7 +173,7 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
             data-tooltip-id='my-tooltip' data-tooltip-place='right' data-tooltip-delay-hide={400}>
               <code
                 className="text-white mt-2 text-sm"
-                dangerouslySetInnerHTML={{ __html: snippet }}
+                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(snippet) }}
               />
             </pre>
             <Tooltip id='my-tooltip' clickable className="custom-rt-tooltip"
@@ -189,7 +190,7 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
             onClick={() => setIsModalOpen(false)}
           >
             <div 
-              className="bg-black/50 rounded-2xl p-6 max-h-[80vh] w-[600px] max-w-[90vw] overflow-y-auto animate-fadeIn border-1 border-white"
+              className="bg-black/50 rounded-2xl p-6 max-h-[80vh] w-auto max-w-[70vw] overflow-y-auto animate-fadeIn border-1 border-white"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex justify-between items-center mb-4 pointer-events-auto">
