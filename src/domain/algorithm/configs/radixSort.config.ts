@@ -14,32 +14,52 @@ export const radixSortConfig: AlgorithmConfig = {
   ],
   pseudocodes: {
     OnRadixStateChanged: {
-      title: "State of the algorithm has changed",
-      code: ``
+      title: "State of the algorithm has changed (Step forward or back)",
+      code: `state ← 'idle' | 'selectDigit' | 'distribute' | 'collect' | 'advance' | 'done'`,
+      tooltip: `
+        history.Push(model.CreateSnapshot()); 
+        switch (model.State) 
+          case RadixState.Idle: TransitionTo(RadixState.SelectDigit); break; 
+          case RadixState.SelectDigit: ExecuteSelectDigit(); TransitionTo(RadixState.DistributeToBins); break;
+          case RadixState.DistributeToBins: ExecuteDistribute(); TransitionTo(RadixState.CollectFromBins); break;
+          case RadixState.CollectFromBins: ExecuteCollect(); TransitionTo(RadixState.AdvanceDigit); break;
+          case RadixState.AdvanceDigit: ExecuteAdvance(); 
+            if (model.IsComplete) TransitionTo(RadixState.Done); events.RaiseSortingComplete(); 
+            else TransitionTo(RadixState.SelectDigit); 
+            break; 
+          case RadixState.Done: break; 
+      `,
     },
     OnDigitSelected: {
       title: "Selected the rightmost digit → Least Significant Digit (LSD)",
-      code: ``
+      code: `ActiveDigit ← ActiveDigit++`,
+      tooltip: `Active digit marks the currently aktive digit (or <b>key</b>, see more in description above) in our LSD radix sort`,
     },
     OnLetterMovedToBin: {
       title: "Moving the letters into bins(boards)...",
-      code: ``
+      code: `bins ← array[0..RADIX-1] of empty queues<br/>for each item in items:<br/>&nbsp;&nbsp;digit ← getActiveDigit(item)<br/>&nbsp;&nbsp;bins[digit].Enqueue(item)<br/>emit DistributionComplete<br/>`,
+      tooltip: `We distribute the letters based on the currently active digit. Each letter goes into the bin with a number equal to the active digit.`,
     },
     OnLetterCollected: {
       title: "Collecting letters from bins(boards)...",
-      code: ``
+      code: `Letters ← empty array&lt;Letter&gt;<br/><br/>for binIndex from 0 to RADIX-1:<br/>&nbsp;&nbsp;while bins[binIndex] is not empty:<br/>&nbsp;&nbsp;&nbsp;&nbsp;letter ← bins[binIndex].Dequeue()<br/>&nbsp;&nbsp;&nbsp;&nbsp;Letters.Add(letter)<br/><br/>emit CollectionComplete<br/>`,
+      tooltip: `We collect the letters by draining the bins in order, bins are processed by index, from low to high, preserving order. Each bin is fully emptied and the Letters array is reconstructed.`,
     },
     OnPassComplete: {
-      title: "",
-      code: ``
+      title: "Advancing to the next digit (key)",
+      code: `ActiveDigit ← ActiveDigit++<br/>bins ← array[0..RADIX-1] of empty queues`,
+      tooltip: `Note that if "next digit" does not exists, we should have our letters already sorted`,
     },
     OnRadixSortComplete: {
       title: "Sorting is complete",
-      code: ``
+      code: `if (IsSortingComplete)&nbsp;&nbsp;state ← States.done<br/>,&nbsp;&nbsp;emit SortingComplete<br/>else<br/>&nbsp;&nbsp;state ← States.selectDigit`,
+      tooltip: ``,
     },
     OnLettersInitialized: {
       title: "Initialized letters to sort.",
-      code: ``
+      code: `initializeLetters(letter):<br/>&nbsp;&nbsp;store letter as internal data<br/>&nbsp;&nbsp;set zipLabel text to letter.FullZip<br/><br/>
+        &nbsp;&nbsp;for i from 0 to 4:<br/>&nbsp;&nbsp;&nbsp;&nbsp;if i &lt; number of digitLabels:<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;set digitLabels[i] text to letter.Digits[i]<br/>`,
+      tooltip: `We initialize our letters which we want to sort, while restricting the numbers to 5 digits, since ZIP postal codes have usually 5 digits.`,
     }
   },
   operations: ['OnRadixStateChanged', 'OnDigitSelected', 'OnLetterMovedToBin', 'OnLetterCollected', 'OnPassComplete', 'OnRadixSortComplete', 'OnLetterInitialized'],

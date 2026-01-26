@@ -133,7 +133,7 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
         </div>
       )}
 
-      <div className="flex flex-row flex-1 gap-4 pointer-events-auto">
+      <div className="flex flex-row flex-1 gap-4 pointer-events-aut max-h-[90vh]">
         {/* Unity container - 4:3 aspect ratio (Game) */}
         <div className="flex-1 flex items-center justify-center">
           <div className='relative w-full h-0 pb-[75%] max-h-[calc(100vh-100px)]'>
@@ -147,11 +147,10 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
         </div>
 
         {/* Side Panel */}
-        <div className="w-80 flex flex-col gap-3 pointer-events-auto justify-center">
+        <div className="w-80 flex flex-col gap-3 pointer-events-auto justify-center overflow-y-auto py-4">
           
           {/* Description Panel */}
-          <div className=" p-4 rounded-2xl text-white font-[family-name:var(--font-sf)]  bg-white/10 hover:outline-1 hover:rounded-none hover:outline-white transition-all
-          duration-200">
+          <div className=" p-4 rounded-2xl text-white font-[family-name:var(--font-sf)]  bg-white/10 hover:border-1 hover:rounded-none hover:border-white transition-all duration-200">
             <h2 className='text-lg font-bold mb-2'>{config.title}</h2>
             <p className='text-sm' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(config.description) }} />
 
@@ -164,15 +163,15 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
           </div>
           {/* Explanation Panel */}
           <div className="p-4 rounded-2xl border-2 border-dashed border-white  text-primary hover:border-2 hover:rounded-none transition-all
-          duration-200">
-          <code className=' text-blue-200 text-lg border-b-white/80'>{explanation}</code>
+          duration-200 overflow-auto">
+          <code className=' text-blue-200 text-sm border-b-white/80'>{explanation}</code>
           {showSnippet && (
             <div className='overflow-auto'>
             <pre className="mt-2 border-t border-white/30" 
             data-tooltip-content={`${snippetTooltip}`} 
             data-tooltip-id='my-tooltip' data-tooltip-place='right' data-tooltip-delay-hide={400}>
               <code
-                className="text-white mt-2 text-sm"
+                className="text-white mt-2 text-sm "
                 dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(snippet) }}
               />
             </pre>

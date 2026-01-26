@@ -27,23 +27,35 @@ export const pathfindingConfig: AlgorithmConfig = {
     },
     OnStepForward: {
       title: "Step until the goal node is not found",
-      code: `function StepForward() {<br/>&nbsp;&nbsp;foreach (var edge in current.edges)<br/>&nbsp;&nbsp;{<br/>&nbsp;&nbsp;&nbsp;&nbsp;Node neighbor = edge.GetOtherNode(current);<br/>&nbsp;&nbsp;&nbsp;&nbsp;if (!neighbor.visited)<br/>&nbsp;&nbsp;&nbsp;&nbsp;{<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;float newDist = current.distance + edge.weight;<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (newDist &lt; neighbor.distance)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;neighbor.distance = newDist;<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;neighbor.previous = current;<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br/>&nbsp;&nbsp;&nbsp;&nbsp;}<br/>&nbsp;&nbsp;}<br/>}`
+      code: `function StepForward() {<br/>&nbsp;&nbsp;foreach (var edge in current.edges)<br/>&nbsp;&nbsp;{<br/>&nbsp;&nbsp;&nbsp;&nbsp;Node neighbor = edge.GetOtherNode(current);<br/>&nbsp;&nbsp;&nbsp;&nbsp;if (!neighbor.visited)<br/>&nbsp;&nbsp;&nbsp;&nbsp;{<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;float newDist = current.distance + edge.weight;<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (newDist &lt; neighbor.distance)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;neighbor.distance = newDist;<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;neighbor.previous = current;<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br/>&nbsp;&nbsp;&nbsp;&nbsp;}<br/>&nbsp;&nbsp;}<br/>}`,
+      tooltip: `Stepping forward - searching for all the neighbors of the current node and "exploring them" one by one.`
     },
     OnNoPathExists: {
       title: "No path exists further",
-      code: `if (current.distance == Mathf.Infinity)<br/>{<br/>&nbsp;&nbsp;break; // No path exists<br/>}`
+      code: `if (current.distance == Mathf.Infinity)<br/>
+      &nbsp;&nbsp;emit NoPathFound<br/>
+      &nbsp;&nbsp;break<br/>`,
+      tooltip: `It's good practice to initialize the node distances to Infinity, so if we can not measure a smaller than infinity distance between 2 nodes, we can conclude that no path exists between the 2 nodes.`,
     },
     OnAlgoPathFound: {
       title: "Algorithm found optimal path",
-      code: `function SolveDijkstra(grid) {<br/>&nbsp;&nbsp;...<br/>}`
+      code: `while (unvisitedNodes.Count > 0)<br/>
+      &nbsp;&nbsp;currentNode ← StepForward()<br/>,
+      &nbsp;&nbsp;currentNode.visited ← true<br/>,
+      &nbsp;&nbsp;if (currentNode == goalNode)
+      &nbsp;&nbsp;&nbsp;&nbsp;emit AlgorithmPathFound
+      &nbsp;&nbsp;&nbsp;&nbsp;break<br/>`,
+      tooltip: `A shortest path algorithm (Dijkstra's algorithm in our case, see more in description above) found the shortest path from <b>startNode<b/> to <b>goalNode<b/>.`,
     },
     OnPlayerPathFound: {
       title: "Player found a path",
-      code: `// Player reached goal node`
+      code: `// Player reached goal node`,
+      tooltip: ``,
     },
     PathsComparison: {
       title: "Compare paths",
-      code: `// Comparing greedy vs Dijkstra`
+      code: `// Comparing greedy vs Dijkstra`,
+      tooltip: ``,
     }
   },
   //TODO: get comparison of dijkstra vs greedy(user) pathlenghts from dispatch

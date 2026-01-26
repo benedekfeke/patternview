@@ -63,6 +63,7 @@ export const pathfindingHandler: AlgorithmHandler = {
           },
           explanation: '',
           snippet: pathfindingConfig.pseudocodes.OnSceneRestarted?.code,
+          tooltip: pathfindingConfig.pseudocodes.OnSceneRestarted?.tooltip,
         };
       case 'OnGraphRandomized':
         return {
@@ -74,6 +75,7 @@ export const pathfindingHandler: AlgorithmHandler = {
           },
           explanation: '',
           snippet: pathfindingConfig.pseudocodes.OnGraphRandomized?.code,
+          tooltip: pathfindingConfig.pseudocodes.OnGraphRandomized?.tooltip,
         };
       case 'OnStepForward':
         return {
@@ -85,6 +87,7 @@ export const pathfindingHandler: AlgorithmHandler = {
           },
           explanation: '',
           snippet: pathfindingConfig.pseudocodes.OnStepForward?.code,
+          tooltip: pathfindingConfig.pseudocodes.OnStepForward?.tooltip,
         };
       case 'OnNoPathExists':
         return {
@@ -95,6 +98,7 @@ export const pathfindingHandler: AlgorithmHandler = {
           },
           explanation: '',
           snippet: pathfindingConfig.pseudocodes.OnNoPathExists?.code,
+          tooltip: pathfindingConfig.pseudocodes.OnNoPathExists?.tooltip,
         }
         case 'OnAlgoPathFound':
           return {
@@ -105,6 +109,7 @@ export const pathfindingHandler: AlgorithmHandler = {
             },
             explanation: '',
             snippet: pathfindingConfig.pseudocodes.OnAlgoPathFound?.code,
+            tooltip: pathfindingConfig.pseudocodes.OnAlgoPathFound?.tooltip,
           }
         case 'OnPlayerPathFound':
           return {
@@ -115,6 +120,7 @@ export const pathfindingHandler: AlgorithmHandler = {
             },
             explanation: '',
             snippet: pathfindingConfig.pseudocodes.OnPlayerPathFound?.code,
+            tooltip: pathfindingConfig.pseudocodes.OnPlayerPathFound?.tooltip,
           }
         case 'PathsComparison':
           return {

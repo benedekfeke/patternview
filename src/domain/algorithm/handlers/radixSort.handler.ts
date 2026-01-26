@@ -41,16 +41,17 @@ export const radixSortHandler: AlgorithmHandler = {
     const mkMessage = (p:any) => (p === undefined || p === null) ? null : (typeof p === 'string' ? p : JSON.stringify(p));
 
     switch(operationName) {
-      case 'OnRadixStateChanged':
-        return {
-          newState: {
-            ...state,
-            phase: payload as RadixState['phase'],
-            message: mkMessage(payload),
-          },
-          explanation: '',
-          snippet: radixSortConfig.pseudocodes.OnRadixStateChanged?.code,
-        }
+      // case 'OnRadixStateChanged':
+      //   return {
+      //     newState: {
+      //       ...state,
+      //       phase: payload as RadixState['phase'],
+      //       message: mkMessage(payload),
+      //     },
+      //     explanation: '',
+      //     snippet: radixSortConfig.pseudocodes.OnRadixStateChanged?.code,
+      //     tooltip: radixSortConfig.pseudocodes.OnRadixStateChanged?.tooltip,
+      //   }
       case 'OnDigitSelected':
         return {
           newState: {
@@ -60,6 +61,7 @@ export const radixSortHandler: AlgorithmHandler = {
           },
           explanation: '',
           snippet: radixSortConfig.pseudocodes.OnDigitSelected?.code,
+          tooltip: radixSortConfig.pseudocodes.OnDigitSelected?.tooltip,
         }
       case 'OnLetterMovedToBin': {
         const {zip, bin} = payload || {}
@@ -71,6 +73,7 @@ export const radixSortHandler: AlgorithmHandler = {
           },
           explanation: '',
           snippet: radixSortConfig.pseudocodes.OnLetterMovedToBin?.code,
+          tooltip: radixSortConfig.pseudocodes.OnLetterMovedToBin?.tooltip,
         }
       }
       case 'OnLetterCollected': {
@@ -83,6 +86,7 @@ export const radixSortHandler: AlgorithmHandler = {
           },
           explanation: '',
           snippet: radixSortConfig.pseudocodes.OnLetterCollected?.code,
+          tooltip: radixSortConfig.pseudocodes.OnLetterCollected?.tooltip,
         }
       }
       case 'OnPassComplete':
@@ -95,6 +99,7 @@ export const radixSortHandler: AlgorithmHandler = {
           },
           explanation: '',
           snippet: radixSortConfig.pseudocodes.OnPassComplete?.code,
+          tooltip: radixSortConfig.pseudocodes.OnPassComplete?.tooltip,
         }
       case 'OnRadixSortComplete':
         return {
@@ -105,6 +110,7 @@ export const radixSortHandler: AlgorithmHandler = {
           },
           explanation: '',
           snippet: radixSortConfig.pseudocodes.OnRadixSortComplete?.code,
+          tooltip: radixSortConfig.pseudocodes.OnRadixSortComplete?.tooltip,
         }
       case 'OnLettersInitialized':
         return {
@@ -115,6 +121,7 @@ export const radixSortHandler: AlgorithmHandler = {
           },
           explanation: '',
           snippet: radixSortConfig.pseudocodes.OnLettersInitialized?.code,
+          tooltip: radixSortConfig.pseudocodes.OnLettersInitialized?.tooltip,
         }
 
       default:
