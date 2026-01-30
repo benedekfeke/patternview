@@ -1,4 +1,5 @@
 import Noise from "@/components/Noise";
+import { UnityProvider } from "@/src/adapters/unity/UnityProvider";
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import Footer from "./components/Footer";
@@ -46,19 +47,21 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${sf.variable} flex flex-col h-dvh bg-black`}>
         <div className='fixed inset-0 -z-10'>
-        <Noise
-          patternSize={260}
-          patternScaleX={1}
-          patternScaleY={1}
-          patternRefreshInterval={8}
-          patternAlpha={30}
-        />
-      </div>
+          <Noise
+            patternSize={260}
+            patternScaleX={1}
+            patternScaleY={1}
+            patternRefreshInterval={8}
+            patternAlpha={30}
+            />
+        </div>
+      <UnityProvider>
         <Header />
-        <main className="flex-1 flex flex-col pointer-events-none">
+        <main className="flex-1 flex flex-col">
           {children}
         </main>
         <Footer />
+      </UnityProvider>
       </body>
     </html>
   );

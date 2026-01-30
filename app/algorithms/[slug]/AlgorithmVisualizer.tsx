@@ -7,6 +7,7 @@ import { AlgorithmState } from '@/src/domain/algorithm/algorithm.handler';
 import { AlgorithmConfig } from '@/src/domain/algorithm/algorithm.types';
 import { getAlgorithmHandler } from '@/src/domain/algorithm/handler.registry';
 import DOMPurify from 'dompurify';
+import { Send } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Tooltip } from 'react-tooltip';
@@ -19,6 +20,7 @@ interface AlgorithmVisualizerProps {
 
 function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisualizerProps) {
   const unityContext = useSharedUnity();
+  
 
   const handler = useMemo(() => getAlgorithmHandler(config.sceneName), [config.sceneName]); 
 
@@ -32,6 +34,7 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const [currentScene, setCurrentScene] = useState<string>('');
+  const [Zipcodes, setZipCodes] = useState<string>('');
 
   useEffect(() => {
     if (handler) {
@@ -112,7 +115,7 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
       unityContext.addEventListener(event, handler);
     })
 
-    console.log("event listeners registered", config.operations);
+    // console.log("event listeners registered", config.operations);
 
     return () => {
       handlers.forEach(({event, handler}) => {
@@ -121,6 +124,11 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
     }
   }, [unityContext, config.operations, handleOperation]);
 
+  const sendZipCodesToUnity = useCallback(() => {
+    if (!unityContext.isLoaded || currentScene !== 'RadixSort') return;
+    const zipArray = Zipcodes.split(',').map(s => s.trim()).filter(Boolean);
+    unityContext.sendMessage('RadixGameManager', "SetInputFromFrontend", JSON.stringify(zipArray));
+  }, [Zipcodes, currentScene]);
 
 
   //return the component
@@ -133,7 +141,7 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
         </div>
       )}
 
-      <div className="flex flex-row flex-1 gap-4 pointer-events-aut max-h-[90vh]">
+      <div className="flex flex-row flex-1 gap-4 pointer-events-auto max-h-[90vh]">
         {/* Unity container - 4:3 aspect ratio (Game) */}
         <div className="flex-1 flex items-center justify-center">
           <div className='relative w-full h-0 pb-[75%] max-h-[calc(100vh-100px)]'>
@@ -163,7 +171,7 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
           </div>
           {/* Explanation Panel */}
           <div className="p-4 rounded-2xl border-2 border-dashed border-white  text-primary hover:border-2 hover:rounded-none transition-all
-          duration-200 overflow-auto">
+          duration-200 overflow-x-scroll overflow-y-auto">
           <code className=' text-blue-200 text-sm border-b-white/80'>{explanation}</code>
           {showSnippet && (
             <div className='overflow-auto'>
@@ -180,6 +188,23 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
             </div>
           )}
           </div>
+          {/* radix input */}
+          {config.sceneName === 'RadixSort' && (
+            <div className='flex flex-col mt-2 gap-2 items-start '>
+              <input 
+                value={Zipcodes}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setZipCodes(e.target.value)}
+                placeholder='Comma-separated 5-digit number'
+                onKeyDown={(e) => {if (e.key === 'Enter') sendZipCodesToUnity();}}
+                className='w-full rounded-2xl text-white focus:rounded-none border-white border-1 transition-all duration-200 text-sm p-2'
+              />
+              <Button onClick={sendZipCodesToUnity}
+              className='ml-2 p-4 border-1 rounded-2xl transition-all duration-200 hover:rounded-none bg-blue-500/60 text-white hover:bg-blue-200 hover:text-black'
+              >
+                <Send size={16} strokeWidth={0.8}/>
+                Send to game</Button>
+            </div>
+          )}
         </div>
         
         {/* Modal Portal */}

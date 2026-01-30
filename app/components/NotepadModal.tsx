@@ -1,5 +1,6 @@
 'use client'
 
+import { useSharedUnity } from "@/src/adapters/unity/UnityProvider";
 import { Loader2, Plus, Save, Trash2, X } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { createPortal } from "react-dom";
@@ -34,6 +35,17 @@ export default function NotepadModal({isOpen, onClose}: NotepadModalProps) {
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const {UNSAFE__unityInstance, sendMessage} = useSharedUnity();
+
+  useEffect(() => {
+
+    if (isOpen) {
+      sendMessage("SceneManager", "SetFocus", 0);
+    } else {
+      sendMessage("SceneManager", "SetFocus", 1);
+    }
+
+  }, [isOpen, sendMessage, UNSAFE__unityInstance]);
 
   // fetch all pages when modal opens
   useEffect(() => {
@@ -286,7 +298,7 @@ export default function NotepadModal({isOpen, onClose}: NotepadModalProps) {
             {/* content(right) */}
             <div className="flex-1 flex flex-col p-4">
               {/* title input */}
-              <input
+              <input autoFocus contentEditable="true"
                 type='text' value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Page title..."
                 className="w-full px-3 py-2 mb-3 bg-white/10 border border-white/20 rounded-lg text-white placeholder-white/50 focus:outline-none focus:ring-2 focus:ring-white/30"
               />
