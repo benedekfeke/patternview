@@ -46,7 +46,7 @@ export default function HeaderClient({user}: {user: User | null}) {
   // For local testing, use the button below
 
   return (
-    <div className='w-full font-[family-name:var(--font-sf)] pointer-events-auto '>
+    <div className='w-full font-[family-name:var(--font-sf)] pointer-events-auto'>
 
     <div className="container mx-auto px-4 md:px-6 lg:px-8">
       <header className="flex h-14 w-full shrink-0 items-center px-4 md:px-6 lg:px-8">
@@ -63,7 +63,7 @@ export default function HeaderClient({user}: {user: User | null}) {
           {/* notepad -modal */}
           {user && (
             <Button onClick={() => setIsNotepadOpen(true)}
-            className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-lg bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 hover:bg-white/30 transition-all duration-300 hover:rounded-none"
+            className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-lg bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-base text-gray-50 hover:bg-black hover:border-white transition-all duration-300 hover:rounded-none"
             >
               <BookOpen size={16} className='mr-2' />
               Notepad
@@ -75,28 +75,28 @@ export default function HeaderClient({user}: {user: User | null}) {
           {user?.isAdmin && (
           <Link
             href="/dashboard"
-            className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-lg bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 hover:bg-white/30 transition-all duration-300 hover:rounded-none"
+            className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-lg bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-base text-gray-50 hover:bg-black hover:border-white transition-all duration-300 hover:rounded-none"
             prefetch={false}
             >
             Dashboard
           </Link>)}
           <Link
             href={`/test`}
-            className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-lg bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 hover:bg-white/30 transition-all duration-300 hover:rounded-none"
+            className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-lg bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-base text-gray-50 hover:bg-black hover:border-white transition-all duration-300 hover:rounded-none"
             prefetch={false}
             >
             TestPage
           </Link>
           <Button
             onClick={handleSync}
-            className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-lg bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 hover:bg-white/30 transition-all duration-300 hover:rounded-none"
+            className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-lg bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-base text-gray-50 hover:bg-black hover:border-white transition-all duration-300 hover:rounded-none"
             >
             Sync with local DB
           </Button>
           {!user && (
             <Link
             href="/auth/login"
-            className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-lg bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 hover:bg-white/30 transition-all duration-300 hover:rounded-none"
+            className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-lg bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-base text-gray-50 hover:bg-black hover:border-white transition-all duration-300 hover:rounded-none"
             prefetch={false}
             >
               Login
@@ -106,13 +106,13 @@ export default function HeaderClient({user}: {user: User | null}) {
             <>
               <Link
                 href="/profile"
-                className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-lg bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 hover:bg-white/40 transition-all duration-300 hover:rounded-none"
+                className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-lg bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-base text-gray-50 hover:bg-black hover:border-white transition-all duration-300 hover:rounded-none"
                 >
                 Profile
               </Link>
               <Link
                 href="/auth/logout"
-                className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-lg bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-sm font-medium text-gray-50 hover:bg-white/30 transition-all duration-300 hover:rounded-none"
+                className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-lg bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-base text-gray-50 hover:bg-black hover:border-white transition-all duration-300 hover:rounded-none"
                 >
                 Logout
               </Link>

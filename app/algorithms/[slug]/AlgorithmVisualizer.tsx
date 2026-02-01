@@ -7,8 +7,8 @@ import { AlgorithmState } from '@/src/domain/algorithm/algorithm.handler';
 import { AlgorithmConfig } from '@/src/domain/algorithm/algorithm.types';
 import { getAlgorithmHandler } from '@/src/domain/algorithm/handler.registry';
 import DOMPurify from 'dompurify';
-import { Send } from 'lucide-react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { Send, X } from 'lucide-react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Tooltip } from 'react-tooltip';
 import 'react-tooltip/dist/react-tooltip.css';
@@ -19,14 +19,21 @@ interface AlgorithmVisualizerProps {
 }
 
 function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisualizerProps) {
-  const unityContext = useSharedUnity();
-  
+  const {
+    unityProvider,
+    isLoaded: unityIsLoaded,
+    loadingProgression,
+    addEventListener,
+    removeEventListener,
+    sendMessage
+  } = useSharedUnity();  
 
   const handler = useMemo(() => getAlgorithmHandler(config.sceneName), [config.sceneName]); 
 
-  const [algorithmState, setAlgorithmState] = useState<AlgorithmState>(handler?.initialState ?? {});
   
-
+  
+  
+  const [algorithmState, setAlgorithmState] = useState<AlgorithmState>(handler?.initialState ?? {});
   const [explanation, setExplanation] = useState<string>("");
   const [snippet, setSnippet] = useState<string>("");
   const [snippetTooltip, setSnippetTooltip] = useState<string>("Not defined");
@@ -35,53 +42,58 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
   const [isLoaded, setIsLoaded] = useState(false);
   const [currentScene, setCurrentScene] = useState<string>('');
   const [Zipcodes, setZipCodes] = useState<string>('');
+  // state to check if component is mounded
+  const [mounted, setMounted] = useState(false);
+  
+  // use a ref to store the state for unity events - prevents re-registering
+  const stateRef = useRef(algorithmState);
+  useEffect(() => {
+    stateRef.current = algorithmState;
+  }, [algorithmState]);
 
   useEffect(() => {
-    if (handler) {
+    setMounted(true);
+    if (handler){
       setAlgorithmState(handler.initialState);
       setExplanation(handler.getExplanation(handler.initialState));
     }
   }, [handler]);
 
+  const safeSanitize = useCallback((html: string)=> {
+    if (!mounted || typeof window === 'undefined') return html;
+    return DOMPurify.sanitize(html);
+  }, [mounted]);
+
   //load the specific scene based on sceneName
   useEffect( () => {
-
     //only load scene if we're switching to a different scene
-    if (currentScene === config.sceneName) {
-      console.log(`Already on scene; ${config.sceneName}`);
-      return;
-    }
+    if (currentScene === config.sceneName || !unityIsLoaded) return;
 
-    // TODO: Send message with zip codes(5 digit numbers to init letters)
-    if (config.sceneName === 'RadixSort') {
-      // unityContext.sendMessage("")
-    }
+    let isSubscribed = true;
 
     const loadScene = async() => {
       try {
-
-        if (!unityContext.isLoaded) {
-          console.log("Unity is not loaded yet, waiting...");
-          return;
-        }
-
         await new Promise(resolve => setTimeout(resolve, 1000));
+
+        if (!isSubscribed) return;
         
         console.log(`attempting to load scene: ${config.sceneName}`);
-        unityContext.sendMessage('SceneManager', 'LoadSceneByName', config.sceneName);
+        sendMessage('SceneManager', 'LoadSceneByName', config.sceneName);
         
         await new Promise(resolve => setTimeout(resolve, 500));
 
-        setCurrentScene(config.sceneName);
-        setIsLoaded(true);
-        
+        if (isSubscribed) {
+          setCurrentScene(config.sceneName);
+          setIsLoaded(true);
+        }
       } catch (error) {
         console.log(`Failed to load ${config.sceneName} scene: `, error);
       }
     };
 
     loadScene();
-  }, [unityContext, unityContext.isLoaded, config.sceneName]);
+    return () => {isSubscribed = false;};
+  }, [unityIsLoaded, config.sceneName, sendMessage, currentScene]);
 
   // 
   const handleOperation = useCallback((operationName: string) => (...params: any[]) => {
@@ -90,7 +102,7 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
       return;
     }
 
-    const result = handler.handleOperation(operationName, algorithmState, ...params);
+    const result = handler.handleOperation(operationName, stateRef.current, ...params);
     
     setAlgorithmState(result.newState);
     setExplanation(handler.getExplanation(result.newState));
@@ -102,7 +114,7 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
     if (result.tooltip) {
       setSnippetTooltip(result.tooltip);
     }
-  }, [handler, algorithmState, config.sceneName]);
+  }, [handler, config.sceneName]);
   
   //register dispatch events from unity with handlers
   useEffect(() => {
@@ -112,32 +124,30 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
     }));
 
     handlers.forEach(({event, handler}) => {
-      unityContext.addEventListener(event, handler);
+      addEventListener(event, handler);
     })
-
-    // console.log("event listeners registered", config.operations);
 
     return () => {
       handlers.forEach(({event, handler}) => {
-        unityContext.removeEventListener(event, handler);
+        removeEventListener(event, handler);
       });
     }
-  }, [unityContext, config.operations, handleOperation]);
+  }, [addEventListener, removeEventListener, config.operations, handleOperation]);
 
   const sendZipCodesToUnity = useCallback(() => {
-    if (!unityContext.isLoaded || currentScene !== 'RadixSort') return;
+    if (!unityIsLoaded || currentScene !== 'RadixSort') return;
     const zipArray = Zipcodes.split(',').map(s => s.trim()).filter(Boolean);
-    unityContext.sendMessage('RadixGameManager', "SetInputFromFrontend", JSON.stringify(zipArray));
-  }, [Zipcodes, currentScene]);
+    console.log(JSON.stringify(zipArray));
+    // RadixGameManager script is attached to GameManager object (we have to call the object)
+    sendMessage("GameManager", "SetInputFromFrontend", JSON.stringify(zipArray));
+  }, [Zipcodes, currentScene, unityIsLoaded, sendMessage]);
 
-
-  //return the component
   return (
     
     <div className={`flex flex-col h-full ${className}`}>
       {!isLoaded && (
         <div className='flex items-center justify-center h-full text-white'>
-          Loading {config.title}... {Math.round(unityContext.loadingProgression * 100)}%
+          Loading {config.title}... {Math.round(loadingProgression * 100)}%
         </div>
       )}
 
@@ -147,7 +157,7 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
           <div className='relative w-full h-0 pb-[75%] max-h-[calc(100vh-100px)]'>
             <div className='absolute inset-0 rounded-2xl overflow-hidden shadow-lg'>
               <Unity 
-                unityProvider={unityContext.unityProvider} 
+                unityProvider={unityProvider} 
                 className={`w-full h-full pointer-events-auto ${isLoaded ? 'block' : 'hidden'}`}
               />
             </div>
@@ -157,10 +167,29 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
         {/* Side Panel */}
         <div className="w-80 flex flex-col gap-3 pointer-events-auto justify-center overflow-y-auto py-4">
           
+          {/* Explanation Panel */}
+          <div className="p-4 rounded-2xl border-2 border-dashed border-white  text-primary hover:border-2 hover:rounded-none transition-all
+          duration-200 overflow-auto">
+          <code className='text-blue-200 text-sm border-b-white/80'>{explanation}</code>
+          {showSnippet && (
+            <div className='overflow-auto'>
+            <pre className="py-4 mt-2 border-t border-white/30" 
+            data-tooltip-content={`${snippetTooltip}`} 
+            data-tooltip-id='my-tooltip' data-tooltip-place='bottom' data-tooltip-delay-hide={400}>
+              <code
+                className="text-white mt-2 text-sm "
+                dangerouslySetInnerHTML={{ __html: safeSanitize(snippet) }}
+              />
+            </pre>
+            <Tooltip id='my-tooltip' clickable className="custom-rt-tooltip fixed"
+              classNameArrow="custom-rt-tooltip-arrow" />
+            </div>
+          )}
+          </div>
           {/* Description Panel */}
           <div className=" p-4 rounded-2xl text-white font-[family-name:var(--font-sf)]  bg-white/10 hover:border-1 hover:rounded-none hover:border-white transition-all duration-200">
             <h2 className='text-lg font-bold mb-2'>{config.title}</h2>
-            <p className='text-sm' dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(config.description) }} />
+            <p className='text-sm' dangerouslySetInnerHTML={{ __html: safeSanitize(config.description) }} />
 
             <Button 
               onClick={() => setIsModalOpen(true)}
@@ -168,25 +197,6 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
               >
               More Info
             </Button>
-          </div>
-          {/* Explanation Panel */}
-          <div className="p-4 rounded-2xl border-2 border-dashed border-white  text-primary hover:border-2 hover:rounded-none transition-all
-          duration-200 overflow-x-scroll overflow-y-auto">
-          <code className=' text-blue-200 text-sm border-b-white/80'>{explanation}</code>
-          {showSnippet && (
-            <div className='overflow-auto'>
-            <pre className="mt-2 border-t border-white/30" 
-            data-tooltip-content={`${snippetTooltip}`} 
-            data-tooltip-id='my-tooltip' data-tooltip-place='right' data-tooltip-delay-hide={400}>
-              <code
-                className="text-white mt-2 text-sm "
-                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(snippet) }}
-              />
-            </pre>
-            <Tooltip id='my-tooltip' clickable className="custom-rt-tooltip"
-              classNameArrow="custom-rt-tooltip-arrow" />
-            </div>
-          )}
           </div>
           {/* radix input */}
           {config.sceneName === 'RadixSort' && (
@@ -199,7 +209,7 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
                 className='w-full rounded-2xl text-white focus:rounded-none border-white border-1 transition-all duration-200 text-sm p-2'
               />
               <Button onClick={sendZipCodesToUnity}
-              className='ml-2 p-4 border-1 rounded-2xl transition-all duration-200 hover:rounded-none bg-blue-500/60 text-white hover:bg-blue-200 hover:text-black'
+              className='p-4 w-full items-center border-1 rounded-2xl transition-all duration-200 hover:rounded-none bg-blue-500/60 text-white hover:bg-blue-200 hover:text-black'
               >
                 <Send size={16} strokeWidth={0.8}/>
                 Send to game</Button>
@@ -219,7 +229,9 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
             >
               <div className="flex justify-between items-center mb-4 pointer-events-auto">
                 <h2 className="text-2xl font-bold text-accent border-1 rounded-2xl px-4">{config.title}</h2>
-                <Button size={'sm'} className='rounded-2xl w-max hover:cursor-pointer hover:text-destructive hover:shadow-destructive' variant={'outline'} onClick={() => setIsModalOpen(false)}>×</Button>
+                <Button size={'sm'} className='rounded-4xl w-auto hover:cursor-pointer hover:text-destructive hover:shadow-destructive' variant={'outline'} onClick={() => setIsModalOpen(false)}>
+                  <X size={16}/>
+                </Button>
               </div>
               <div className="text-black pointer-events-auto">
                 {config.modalDescription ? (

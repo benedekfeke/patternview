@@ -1,22 +1,12 @@
 .custom-rt-tooltip {
-  background-color: white !important;
-  color: black !important;
-  border-radius: 12px !important;
-  padding: 0.5rem 0.75rem !important;
-  transition: border-radius 200ms ease, transform 200ms ease, opacity 200ms ease !important;
-  transform: translate3d(0,10px,0) scale(.98);
-  opacity: 0;
+  background-color: black !important;
+  color: white !important;
+  border-radius: 0px !important;
+  padding: 4px !important;
+  opacity: 1;
   max-width: 300px;
   max-height: 200px;
   overflow-y: auto;
-  will-change: border-radius, transform, opacity;
-}
-
-/* this is not working :D */
-.custom-rt-tooltip[data-show="true"] {
-  border-radius: 0px !important;
-  transform: translate3d(0,0,0) scale(1);
-  opacity: 1;
 }
 
 .custom-rt-tooltip-arrow {

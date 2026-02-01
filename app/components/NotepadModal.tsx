@@ -35,7 +35,7 @@ export default function NotepadModal({isOpen, onClose}: NotepadModalProps) {
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const {UNSAFE__unityInstance, sendMessage} = useSharedUnity();
+  const {sendMessage} = useSharedUnity();
 
   useEffect(() => {
 
@@ -45,7 +45,7 @@ export default function NotepadModal({isOpen, onClose}: NotepadModalProps) {
       sendMessage("SceneManager", "SetFocus", 1);
     }
 
-  }, [isOpen, sendMessage, UNSAFE__unityInstance]);
+  }, [isOpen, sendMessage]);
 
   // fetch all pages when modal opens
   useEffect(() => {
