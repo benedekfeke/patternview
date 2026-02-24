@@ -7,21 +7,22 @@ const algorithms = [
     slug: "queue",
     name: "Queue",
     lottie: "/queue.lottie"
-    // image: "/bubble_sort.png",
   },
   {
     slug: "pathfinding",
     name: "Pathfinding",
     lottie: "/pathfinding.lottie"
-    // image: "/quick_sort.jpg",
   },
   {
     slug: "radixSort",
     name: "RadixSort",
     lottie: "/sorting.lottie"
-    // image: "/quick_sort.jpg",
   },
-  // Add more algorithms as needed
+  {
+    slug: 'trie',
+    name: 'Trie',
+    lottie: "/trie.lottie"
+  }
 ];
 
 export default async function Home() {

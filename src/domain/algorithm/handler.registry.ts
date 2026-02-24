@@ -2,11 +2,13 @@ import { AlgorithmHandler } from "./algorithm.handler";
 import { pathfindingHandler } from "./handlers/pathfinding.handler";
 import { queueHandler } from "./handlers/queue.handler";
 import { radixSortHandler } from "./handlers/radixSort.handler";
+import { trieHandler } from "./handlers/trie.handler";
 
 const handlerRegistry: Record<string, AlgorithmHandler> = {
   Queue: queueHandler,
   Pathfinding: pathfindingHandler,
   RadixSort: radixSortHandler,
+  Trie: trieHandler,
 }
 
 export function getAlgorithmHandler(sceneName: string): AlgorithmHandler | undefined {

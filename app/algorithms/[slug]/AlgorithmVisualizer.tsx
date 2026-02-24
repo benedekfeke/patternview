@@ -1,4 +1,5 @@
 'use client';
+import { fetchAuthorBooks } from '@/app/api/authorBookUtil';
 import DescriptionModal from '@/app/components/DescriptionModal';
 import { Button } from '@/app/components/button';
 import '@/app/components/css/reactTooltip.css';
@@ -11,6 +12,8 @@ import { Send, X } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Tooltip } from 'react-tooltip';
+import { GoeyToaster, goeyToast } from 'goey-toast';
+import 'goey-toast/styles.css';
 import 'react-tooltip/dist/react-tooltip.css';
 import { Unity } from 'react-unity-webgl';
 interface AlgorithmVisualizerProps {
@@ -30,9 +33,6 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
 
   const handler = useMemo(() => getAlgorithmHandler(config.sceneName), [config.sceneName]); 
 
-  
-  
-  
   const [algorithmState, setAlgorithmState] = useState<AlgorithmState>(handler?.initialState ?? {});
   const [explanation, setExplanation] = useState<string>("");
   const [snippet, setSnippet] = useState<string>("");
@@ -44,6 +44,37 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
   const [Zipcodes, setZipCodes] = useState<string>('');
   // state to check if component is mounded
   const [mounted, setMounted] = useState(false);
+
+  // specifically for trie(scene)
+  const [foundAuthor, setFoundAuthor] = useState<string>('');
+  useEffect(() => {
+    console.log('[AlgorithmVisualizer] foundAuthor changed:', foundAuthor);
+    console.log('[AlgorithmVisualizer] sceneName:', config.sceneName);
+
+    if (config.sceneName !== 'Trie' || !foundAuthor) return;
+
+    const fetchAndShowBooks = async () => {
+      console.log('[AlgoVis] fetching books for:', foundAuthor);
+      const books = await fetchAuthorBooks(foundAuthor);
+      console.log('[AlgoVis] books fetched:', books);
+
+      const bookList = books.length > 0
+        ? books.map(b => `- ${b.title} (${b.first_publish_year || 'N/A'})`).join('\n')
+        : 'No books found(OpenLibrary|Gemini';
+
+      goeyToast.info(`You've found a famous writer: ${foundAuthor}`, {
+        description: `The most famous books/publications by this author: \n${bookList}`,
+        borderColor: '#000000',
+        borderWidth: 1.5,
+        bounce: 0.75,
+        timing: {
+          displayDuration: 12000,
+        },
+      })
+    };
+
+    fetchAndShowBooks();
+  }, [foundAuthor, config.sceneName]);
   
   // use a ref to store the state for unity events - prevents re-registering
   const stateRef = useRef(algorithmState);
@@ -80,7 +111,7 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
         console.log(`attempting to load scene: ${config.sceneName}`);
         sendMessage('SceneManager', 'LoadSceneByName', config.sceneName);
         
-        await new Promise(resolve => setTimeout(resolve, 500));
+        await new Promise(resolve => setTimeout(resolve, 1500));
 
         if (isSubscribed) {
           setCurrentScene(config.sceneName);
@@ -106,6 +137,12 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
     
     setAlgorithmState(result.newState);
     setExplanation(handler.getExplanation(result.newState));
+    
+    if (config.sceneName === 'Trie' && operationName === 'OnAuthorFound') {
+      console.log('[AlgorithmVisualizer] OnAuthorFound params:', params);
+      console.log('[AlgorithmVisualizer] Result state message:', result.newState.message);
+      setFoundAuthor(result.newState.message || '');
+    }
     
     if (result.snippet) {
       setSnippet(result.snippet);
@@ -145,6 +182,7 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
   return (
     
     <div className={`flex flex-col h-full ${className}`}>
+
       {!isLoaded && (
         <div className='flex items-center justify-center h-full text-white'>
           Loading {config.title}... {Math.round(loadingProgression * 100)}%
@@ -152,6 +190,8 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
       )}
 
       <div className="flex flex-row flex-1 gap-4 pointer-events-auto max-h-[90vh]">
+        <GoeyToaster position="bottom-center" />
+
         {/* Unity container - 4:3 aspect ratio (Game) */}
         <div className="flex-1 flex items-center justify-center">
           <div className='relative w-full h-0 pb-[75%] max-h-[calc(100vh-100px)]'>

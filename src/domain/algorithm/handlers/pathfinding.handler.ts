@@ -100,38 +100,38 @@ export const pathfindingHandler: AlgorithmHandler = {
           snippet: pathfindingConfig.pseudocodes.OnNoPathExists?.code,
           tooltip: pathfindingConfig.pseudocodes.OnNoPathExists?.tooltip,
         }
-        case 'OnAlgoPathFound':
-          return {
-            newState: {
-              ...state,
-              phase: 'algoFound',
-              AlgoPathLength: message,
-            },
-            explanation: '',
-            snippet: pathfindingConfig.pseudocodes.OnAlgoPathFound?.code,
-            tooltip: pathfindingConfig.pseudocodes.OnAlgoPathFound?.tooltip,
-          }
-        case 'OnPlayerPathFound':
-          return {
-            newState: {
-              ...state,
-              phase: 'playerFound',
-              PlayerPathLength: message,
-            },
-            explanation: '',
-            snippet: pathfindingConfig.pseudocodes.OnPlayerPathFound?.code,
-            tooltip: pathfindingConfig.pseudocodes.OnPlayerPathFound?.tooltip,
-          }
-        case 'PathsComparison':
-          return {
-            newState: {
-              ...state,
-              phase: 'comparison',
-              message: message,
-            },
-            explanation: '',
-            snippet: "Comparing your solution (greedy approach, see Description) vs algorithm solution (Unified cost search, Dijkstra's algorithm..."
-          }
+      case 'OnAlgoPathFound':
+        return {
+          newState: {
+            ...state,
+            phase: 'algoFound',
+            AlgoPathLength: message,
+          },
+          explanation: '',
+          snippet: pathfindingConfig.pseudocodes.OnAlgoPathFound?.code,
+          tooltip: pathfindingConfig.pseudocodes.OnAlgoPathFound?.tooltip,
+        }
+      case 'OnPlayerPathFound':
+        return {
+          newState: {
+            ...state,
+            phase: 'playerFound',
+            PlayerPathLength: message,
+          },
+          explanation: '',
+          snippet: pathfindingConfig.pseudocodes.OnPlayerPathFound?.code,
+          tooltip: pathfindingConfig.pseudocodes.OnPlayerPathFound?.tooltip,
+        }
+      case 'PathsComparison':
+        return {
+          newState: {
+            ...state,
+            phase: 'comparison',
+            message: message,
+          },
+          explanation: '',
+          snippet: "Comparing your solution (greedy approach, see Description) vs algorithm solution (Unified cost search, Dijkstra's algorithm..."
+        }
       default:
         return {newState: state, explanation: message || 'Unknown operation'};
     }
