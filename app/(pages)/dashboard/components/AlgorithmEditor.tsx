@@ -1,8 +1,9 @@
 'use client';
 
 import { Button } from '@/app/components/button';
+import { AlgorithmConfig, Pseudocode } from '@/src/domain/algorithm/algorithm.types';
 import { useState } from 'react';
-import { AlgorithmConfig } from './AlgorithmManager';
+
 
 interface AlgorithmEditorProps {
   name: string;
@@ -96,13 +97,13 @@ export default function AlgorithmEditor({ name, config, onSave, onClose }: Algor
             <div>
               <label className="block text-white/70 text-sm mb-1">Modal Description Segments</label>
               <div className="space-y-2">
-                {editedConfig.modalDescription.map((segment, index) => (
+                {editedConfig.modalDescription?.map((segment, index) => (
                   <div key={index} className="flex gap-2 ">
                     <input
                       type="text"
                       value={segment.text}
                       onChange={(e) => {
-                        const newSegments = [...editedConfig.modalDescription];
+                        const newSegments = [...(editedConfig.modalDescription || [])];
                         newSegments[index] = { ...segment, text: e.target.value };
                         updateField('modalDescription', newSegments);
                       }}
@@ -113,7 +114,7 @@ export default function AlgorithmEditor({ name, config, onSave, onClose }: Algor
                       type="text"
                       value={segment.link || ''}
                       onChange={(e) => {
-                        const newSegments = [...editedConfig.modalDescription];
+                        const newSegments = [...(editedConfig.modalDescription || [])];
                         newSegments[index] = { ...segment, link: e.target.value || undefined };
                         updateField('modalDescription', newSegments);
                       }}
@@ -122,7 +123,7 @@ export default function AlgorithmEditor({ name, config, onSave, onClose }: Algor
                     />
                     <Button
                       onClick={() => {
-                        const newSegments = editedConfig.modalDescription.filter((_, i) => i !== index);
+                        const newSegments = (editedConfig.modalDescription || []).filter((_, i) => i !== index);
                         updateField('modalDescription', newSegments);
                       }}
                       size="icon"
@@ -134,7 +135,7 @@ export default function AlgorithmEditor({ name, config, onSave, onClose }: Algor
                 ))}
                 <Button
                   onClick={() => {
-                    updateField('modalDescription', [...editedConfig.modalDescription, { text: '' }]);
+                    updateField('modalDescription', [...(editedConfig.modalDescription || []), { text: '' }]);
                   }}
                   size="lg"
                   className="bg-purple-300 text-black border-white/20 hover:bg-purple-800 hover:text-white hover:mt-2"
@@ -148,14 +149,26 @@ export default function AlgorithmEditor({ name, config, onSave, onClose }: Algor
 
         {activeTab === 'pseudocode' && (
           <div className="space-y-4">
-            {editedConfig.pseudocodes.map((pseudo, index) => (
-              <div key={index} className="bg-white/5 rounded-lg p-4 space-y-2">
+            {Object.entries(editedConfig.pseudocodes).map(([key, pseudo]) => (
+              <div key={key} className="bg-white/5 rounded-lg p-4 space-y-2">
+                <input
+                  type="text"
+                  value={key}
+                  onChange={(e) => {
+                    const newPseudocodes = { ...editedConfig.pseudocodes };
+                    delete newPseudocodes[key];
+                    newPseudocodes[e.target.value] = pseudo;
+                    updateField('pseudocodes', newPseudocodes);
+                  }}
+                  placeholder="Key"
+                  className="w-full bg-white/10 border border-white/20 rounded-md px-3 py-2 text-white focus:outline-none focus:border-white/40"
+                />
                 <input
                   type="text"
                   value={pseudo.title}
                   onChange={(e) => {
-                    const newPseudocodes = [...editedConfig.pseudocodes];
-                    newPseudocodes[index] = { ...pseudo, title: e.target.value };
+                    const newPseudocodes = { ...editedConfig.pseudocodes };
+                    newPseudocodes[key] = { ...pseudo, title: e.target.value };
                     updateField('pseudocodes', newPseudocodes);
                   }}
                   placeholder="Title"
@@ -164,19 +177,47 @@ export default function AlgorithmEditor({ name, config, onSave, onClose }: Algor
                 <textarea
                   value={pseudo.code}
                   onChange={(e) => {
-                    const newPseudocodes = [...editedConfig.pseudocodes];
-                    newPseudocodes[index] = { ...pseudo, code: e.target.value };
+                    const newPseudocodes = { ...editedConfig.pseudocodes };
+                    newPseudocodes[key] = { ...pseudo, code: e.target.value };
                     updateField('pseudocodes', newPseudocodes);
                   }}
                   placeholder="Code (HTML supported)"
                   rows={3}
                   className="w-full bg-white/10 border border-white/20 rounded-md px-3 py-2 text-white font-mono text-sm focus:outline-none focus:border-white/40"
                 />
+                {pseudo.tooltip !== undefined && (
+                  <input
+                    type="text"
+                    value={pseudo.tooltip || ''}
+                    onChange={(e) => {
+                      const newPseudocodes = { ...editedConfig.pseudocodes };
+                      newPseudocodes[key] = { ...pseudo, tooltip: e.target.value || undefined };
+                      updateField('pseudocodes', newPseudocodes);
+                    }}
+                    placeholder="Tooltip (optional)"
+                    className="w-full bg-white/10 border border-white/20 rounded-md px-3 py-2 text-white text-sm focus:outline-none focus:border-white/40"
+                  />
+                )}
+                <Button
+                  onClick={() => {
+                    const newPseudocodes = { ...editedConfig.pseudocodes };
+                    delete newPseudocodes[key];
+                    updateField('pseudocodes', newPseudocodes);
+                  }}
+                  size="sm"
+                  className="bg-red-300 text-black border-red-400/30 hover:bg-red-500/70 hover:text-white"
+                >
+                  Remove
+                </Button>
               </div>
             ))}
             <Button
               onClick={() => {
-                updateField('pseudocodes', [...editedConfig.pseudocodes, { title: '', code: '' }]);
+                const newKey = `pseudocode_${Object.keys(editedConfig.pseudocodes).length + 1}`;
+                updateField('pseudocodes', { 
+                  ...editedConfig.pseudocodes, 
+                  [newKey]: { title: '', code: '' }
+                });
               }}
               size="lg"
               className="bg-purple-300 text-black border-white/20 hover:bg-purple-800 hover:text-white hover:mt-2"

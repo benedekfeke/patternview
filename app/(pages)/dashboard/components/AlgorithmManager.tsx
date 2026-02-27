@@ -1,16 +1,8 @@
 'use client';
 
 import { useState } from "react";
+import { AlgorithmConfig } from "@/src/domain/algorithm/algorithm.types";
 import AlgorithmEditor from "./AlgorithmEditor";
-
-export interface AlgorithmConfig {
-  title: string,
-  description: string,
-  modalDescription: Array<{text: string; link?: string}>;
-  operations: string[];
-  pseudocodes: Array<{title:string; code:string}>;
-  explanationRules?: Record<string, string>;
-}
 
 interface AlgorithmManagerProps {
   algorithms: Record<string, AlgorithmConfig>;

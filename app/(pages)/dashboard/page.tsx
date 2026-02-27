@@ -1,8 +1,9 @@
 'use client'
+import { AlgorithmConfig } from "@/src/domain/algorithm/algorithm.types";
 import { pathfindingConfig } from "@/src/domain/algorithm/configs/pathfinding.config";
 import { queueConfig } from "@/src/domain/algorithm/configs/queue.config";
 import { useState } from "react";
-import AlgorithmManager, { AlgorithmConfig } from "./components/AlgorithmManager";
+import AlgorithmManager from "./components/AlgorithmManager";
 import AnalyticsPanel from "./components/AnalyticsPanel";
 import DashboardSidebar, { PanelType } from "./components/DashboardSidebar";
 import UserManager from "./components/UserManager";
@@ -13,8 +14,8 @@ export default function Dashboard() {
 
   // store these in DB in the future
   const [algorithms, setAlgorithms] = useState<Record<string, AlgorithmConfig>>({
-    queue: queueConfig as AlgorithmConfig,
-    pathfinding: pathfindingConfig as AlgorithmConfig,
+    queue: queueConfig,
+    pathfinding: pathfindingConfig,
   });
 
   const handleSaveAlgorithm = (name: string, config: AlgorithmConfig) => {
@@ -47,6 +48,4 @@ export default function Dashboard() {
       )}
     </div>
   )
-
-
 }
