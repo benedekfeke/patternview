@@ -94,13 +94,12 @@ export default function HeaderClient({user}: {user: User | null}) {
             Sync with local DB
           </Button> */}
           {!user && (
-            <Link
+            <a
             href="/auth/login"
             className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-lg bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-base text-gray-50 hover:bg-black hover:border-white transition-all duration-300 hover:rounded-none"
-            prefetch={false}
             >
               Login
-            </Link>
+            </a>
           )}
           {user && (
             <>
@@ -110,12 +109,12 @@ export default function HeaderClient({user}: {user: User | null}) {
                 >
                 Profile
               </Link>
-              <Link
+              <a
                 href="/auth/logout"
                 className="z-10 group inline-flex h-9 w-max items-center justify-center rounded-lg bg-white/10 backdrop-blur-md border border-white/20 px-4 py-2 text-base text-gray-50 hover:bg-black hover:border-white transition-all duration-300 hover:rounded-none"
                 >
                 Logout
-              </Link>
+              </a>
             </>
           )}
         </div>
