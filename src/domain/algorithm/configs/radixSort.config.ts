@@ -53,7 +53,7 @@ export const radixSortConfig: AlgorithmConfig = {
     OnRadixSortComplete: {
       title: "Sorting is complete",
       code: `if (IsSortingComplete)&nbsp;&nbsp;state ← States.done<br/>,&nbsp;&nbsp;emit SortingComplete<br/>else<br/>&nbsp;&nbsp;state ← States.selectDigit`,
-      tooltip: ``,
+      tooltip: `All digits have been processed. The array is now fully sorted in lexicographic order.`
     },
     OnLettersInitialized: {
       title: "Initialized letters to sort.",

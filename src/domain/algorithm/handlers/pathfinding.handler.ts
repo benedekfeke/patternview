@@ -33,7 +33,7 @@ export const pathfindingHandler: AlgorithmHandler = {
       case 'playerFound':
         return `Found a path with length ${pfState.PlayerPathLength}`;
       case 'algoFound':
-        return `Found the shortest path with length ${pfState.DijkstraPathLength}`;
+        return `Found the shortest path with length ${pfState.AlgoPathLength}`;
       case -100:
         return `No path found from start to goal node.`;
       default:
@@ -56,8 +56,9 @@ export const pathfindingHandler: AlgorithmHandler = {
         return {
           newState: {
             phase: 'idle',
-            nodesVisited:0,
-            pathLength: null,
+            nodesVisited: 0,
+            PlayerPathLength: null,  // Fixed
+            AlgoPathLength: null,     // Fixed
             currentAlgorithm: null,
             message: null,
           },
@@ -69,8 +70,9 @@ export const pathfindingHandler: AlgorithmHandler = {
         return {
           newState: {
             phase: 'idle',
-            nodesVisited:0,
-            pathLength: null,
+            nodesVisited: 0,
+            PlayerPathLength: null,  // Fixed
+            AlgoPathLength: null,     // Fixed
             message: `Generated new graph`,
           },
           explanation: '',
@@ -82,7 +84,7 @@ export const pathfindingHandler: AlgorithmHandler = {
           newState: {
             phase: 'searching',
             nodesVisited: state.nodesVisited + 1,
-            currentAlgorithms: 'Dijkstra',
+            currentAlgorithm: 'Dijkstra',  // Fixed typo
             message: message,
           },
           explanation: '',

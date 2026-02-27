@@ -19,11 +19,13 @@ export const pathfindingConfig: AlgorithmConfig = {
   pseudocodes: {
     OnSceneRestarted: {
       title: "Reset game with current graph",
-      code: `function Reset()`
+      code: `function Reset()`,
+      tooltip: `Resets the current pathfinding session while keeping the same graph structure. Clears all visited nodes and paths.`
     },
     OnGraphRandomized: {
       title: "Generate a new graph with randomized nodes and connections",
-      code: `function GenerateNewGraph(int nodeCount)`
+      code: `function GenerateNewGraph(int nodeCount)`,
+      tooltip: `Creates a completely new random graph with the specified number of nodes and weighted edges.`
     },
     OnStepForward: {
       title: "Step until the goal node is not found",
@@ -50,12 +52,12 @@ export const pathfindingConfig: AlgorithmConfig = {
     OnPlayerPathFound: {
       title: "Player found a path",
       code: `// Player reached goal node`,
-      tooltip: ``,
+      tooltip: `The player manually navigated to the goal node using a greedy approach (always choosing the nearest unvisited neighbor).`
     },
     PathsComparison: {
       title: "Compare paths",
       code: `// Comparing greedy vs Dijkstra`,
-      tooltip: ``,
+      tooltip: `Compares the player's greedy path length against Dijkstra's optimal shortest path to show the difference in efficiency.`
     }
   },
   //TODO: get comparison of dijkstra vs greedy(user) pathlenghts from dispatch
