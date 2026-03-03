@@ -231,7 +231,7 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
             <div className='overflow-auto'>
             <pre className="py-4 mt-3 border-t-2 border-blue-300/40" 
             data-tooltip-content={`${snippetTooltip}`} 
-            data-tooltip-id='my-tooltip' data-tooltip-place='bottom' data-tooltip-delay-hide={400}>
+            data-tooltip-id='my-tooltip' data-tooltip-place='left' data-tooltip-delay-hide={400}>
               <code
                 className="text-white mt-2 text-sm font-mono"
                 dangerouslySetInnerHTML={{ __html: safeSanitize(snippet) }}
