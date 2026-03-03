@@ -79,7 +79,7 @@ export const pathfindingConfig: AlgorithmConfig = {
     OnPlayerPathFound: {
       title: "Player reached the goal",
       code: `<span class="comment">// Player navigated to goal</span><br/>playerPath ← <span class="fn">reconstructPath</span>(goal)<br/>playerDist ← goal.dist`,
-      tooltip: `The player manually selected nodes to reach the goal. This path may be longer than optimal since humans often use a <b>greedy approach</b> (picking the nearest visible node).`
+      tooltip: `The player manually selected nodes to reach the goal. This path may be longer than optimal since humans often use a greedy approach (picking the nearest visible node).`
     },
     PathsComparison: {
       title: "Compare greedy vs optimal paths",

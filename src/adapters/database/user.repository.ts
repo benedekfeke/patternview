@@ -15,7 +15,7 @@ export const userRepository = {
       `INSERT INTO userprofile (auth0_id, email, username)
       VALUES ($1,$2,$3)
       ON CONFLICT (auth0_id)
-      DO UPDATE SET email = EXCLUDED.email, username = EXCLUDED.username
+      DO UPDATE SET email = EXCLUDED.email
       RETURNING *`,
       [input.auth0Id, input.email, input.username]
     );
