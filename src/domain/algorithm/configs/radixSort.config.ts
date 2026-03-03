@@ -14,55 +14,42 @@ export const radixSortConfig: AlgorithmConfig = {
   ],
   pseudocodes: {
     OnRadixStateChanged: {
-      title: "State of the algorithm has changed (Step forward or back)",
-      code: `state ← 'idle' | 'selectDigit' | 'distribute' | 'collect' | 'advance' | 'done'`,
-      tooltip: `
-        history.Push(model.CreateSnapshot()); 
-        switch (model.State) 
-          case RadixState.Idle: TransitionTo(RadixState.SelectDigit); break; 
-          case RadixState.SelectDigit: ExecuteSelectDigit(); TransitionTo(RadixState.DistributeToBins); break;
-          case RadixState.DistributeToBins: ExecuteDistribute(); TransitionTo(RadixState.CollectFromBins); break;
-          case RadixState.CollectFromBins: ExecuteCollect(); TransitionTo(RadixState.AdvanceDigit); break;
-          case RadixState.AdvanceDigit: ExecuteAdvance(); 
-            if (model.IsComplete) TransitionTo(RadixState.Done); events.RaiseSortingComplete(); 
-            else TransitionTo(RadixState.SelectDigit); 
-            break; 
-          case RadixState.Done: break; 
-      `,
+      title: "Transition to next sorting phase",
+      code: `<span class="keyword">switch</span> (state) {<br/>&nbsp;&nbsp;<span class="keyword">case</span> <span class="string">'idle'</span>: state ← <span class="string">'selectDigit'</span><br/>&nbsp;&nbsp;<span class="keyword">case</span> <span class="string">'selectDigit'</span>: state ← <span class="string">'distribute'</span><br/>&nbsp;&nbsp;<span class="keyword">case</span> <span class="string">'distribute'</span>: state ← <span class="string">'collect'</span><br/>&nbsp;&nbsp;<span class="keyword">case</span> <span class="string">'collect'</span>: state ← <span class="string">'advance'</span><br/>&nbsp;&nbsp;<span class="keyword">case</span> <span class="string">'advance'</span>: state ← isComplete ? <span class="string">'done'</span> : <span class="string">'selectDigit'</span><br/>}`,
+      tooltip: `Radix sort transitions through phases: <b>Select digit → Distribute to bins → Collect from bins → Advance to next digit</b>. This cycle repeats until all digits are processed.`,
     },
     OnDigitSelected: {
-      title: "Selected the rightmost digit → Least Significant Digit (LSD)",
-      code: `ActiveDigit ← ActiveDigit++`,
-      tooltip: `Active digit marks the currently aktive digit (or <b>key</b>, see more in description above) in our LSD radix sort`,
+      title: "Select current digit position (LSD)",
+      code: `<span class="comment">// Least Significant Digit first</span><br/>activeDigit ← activeDigit + 1<br/>position ← digits.length - activeDigit`,
+      tooltip: `In <b>LSD Radix Sort</b>, we start from the rightmost digit (least significant) and move left. This ensures stable sorting — elements with the same digit maintain their relative order from previous passes.`,
     },
     OnLetterMovedToBin: {
-      title: "Moving the letters into bins(boards)...",
-      code: `bins ← array[0..RADIX-1] of empty queues<br/>for each item in items:<br/>&nbsp;&nbsp;digit ← getActiveDigit(item)<br/>&nbsp;&nbsp;bins[digit].Enqueue(item)<br/>emit DistributionComplete<br/>`,
-      tooltip: `We distribute the letters based on the currently active digit. Each letter goes into the bin with a number equal to the active digit.`,
+      title: "Distribute items into digit bins",
+      code: `<span class="keyword">for each</span> item <span class="keyword">in</span> items {<br/>&nbsp;&nbsp;digit ← item.getDigitAt(activeDigit)<br/>&nbsp;&nbsp;bins[digit].<span class="fn">enqueue</span>(item)<br/>}<br/><span class="fn">emit</span>(<span class="string">'DistributionComplete'</span>)`,
+      tooltip: `Each item is placed into a bin (0-9) based on its current digit value. For example, ZIP code <b>12345</b> with activeDigit=0 goes into bin <b>5</b> (rightmost digit).`,
     },
     OnLetterCollected: {
-      title: "Collecting letters from bins(boards)...",
-      code: `Letters ← empty array&lt;Letter&gt;<br/><br/>for binIndex from 0 to RADIX-1:<br/>&nbsp;&nbsp;while bins[binIndex] is not empty:<br/>&nbsp;&nbsp;&nbsp;&nbsp;letter ← bins[binIndex].Dequeue()<br/>&nbsp;&nbsp;&nbsp;&nbsp;Letters.Add(letter)<br/><br/>emit CollectionComplete<br/>`,
-      tooltip: `We collect the letters by draining the bins in order, bins are processed by index, from low to high, preserving order. Each bin is fully emptied and the Letters array is reconstructed.`,
+      title: "Collect items from bins in order",
+      code: `result ← []<br/><span class="keyword">for</span> binIndex <span class="keyword">from</span> 0 <span class="keyword">to</span> 9 {<br/>&nbsp;&nbsp;<span class="keyword">while</span> (bins[binIndex].notEmpty) {<br/>&nbsp;&nbsp;&nbsp;&nbsp;result.<span class="fn">push</span>(bins[binIndex].<span class="fn">dequeue</span>())<br/>&nbsp;&nbsp;}<br/>}<br/><span class="fn">emit</span>(<span class="string">'CollectionComplete'</span>)`,
+      tooltip: `Items are collected by draining bins in order (0→9). Since bins are queues (FIFO), the relative order from previous digit passes is preserved — this is what makes radix sort <b>stable</b>.`,
     },
     OnPassComplete: {
-      title: "Advancing to the next digit (key)",
-      code: `ActiveDigit ← ActiveDigit++<br/>bins ← array[0..RADIX-1] of empty queues`,
-      tooltip: `Note that if "next digit" does not exists, we should have our letters already sorted`,
+      title: "Advance to next digit position",
+      code: `activeDigit ← activeDigit + 1<br/><span class="comment">// Clear bins for next pass</span><br/><span class="keyword">for</span> i <span class="keyword">from</span> 0 <span class="keyword">to</span> 9 {<br/>&nbsp;&nbsp;bins[i] ← <span class="keyword">new</span> Queue()<br/>}`,
+      tooltip: `After processing one digit, we move to the next position (one place left). If no more digits remain, the items are fully sorted.`,
     },
     OnRadixSortComplete: {
-      title: "Sorting is complete",
-      code: `if (IsSortingComplete)&nbsp;&nbsp;state ← States.done<br/>,&nbsp;&nbsp;emit SortingComplete<br/>else<br/>&nbsp;&nbsp;state ← States.selectDigit`,
-      tooltip: `All digits have been processed. The array is now fully sorted in lexicographic order.`
+      title: "Sorting complete",
+      code: `<span class="keyword">if</span> (activeDigit &gt;= maxDigits) {<br/>&nbsp;&nbsp;state ← <span class="string">'done'</span><br/>&nbsp;&nbsp;<span class="fn">emit</span>(<span class="string">'SortingComplete'</span>)<br/>}`,
+      tooltip: `All digit positions have been processed from right to left. The items are now sorted in ascending lexicographic order.`
     },
     OnLettersInitialized: {
-      title: "Initialized letters to sort.",
-      code: `initializeLetters(letter):<br/>&nbsp;&nbsp;store letter as internal data<br/>&nbsp;&nbsp;set zipLabel text to letter.FullZip<br/><br/>
-        &nbsp;&nbsp;for i from 0 to 4:<br/>&nbsp;&nbsp;&nbsp;&nbsp;if i &lt; number of digitLabels:<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;set digitLabels[i] text to letter.Digits[i]<br/>`,
-      tooltip: `We initialize our letters which we want to sort, while restricting the numbers to 5 digits, since ZIP postal codes have usually 5 digits.`,
+      title: "Initialize items for sorting",
+      code: `<span class="keyword">function</span> <span class="fn">initializeLetters</span>(zipCodes) {<br/>&nbsp;&nbsp;<span class="keyword">for each</span> zip <span class="keyword">in</span> zipCodes {<br/>&nbsp;&nbsp;&nbsp;&nbsp;digits ← zip.<span class="fn">split</span>(<span class="string">''</span>)<br/>&nbsp;&nbsp;&nbsp;&nbsp;items.<span class="fn">push</span>({ zip, digits })<br/>&nbsp;&nbsp;}<br/>&nbsp;&nbsp;activeDigit ← 0<br/>}`,
+      tooltip: `Prepares the ZIP codes for sorting. Each 5-digit code is split into individual digits for radix processing. The algorithm will process from the rightmost digit first.`,
     }
   },
-  operations: ['OnRadixStateChanged', 'OnDigitSelected', 'OnLetterMovedToBin', 'OnLetterCollected', 'OnPassComplete', 'OnRadixSortComplete', 'OnLetterInitialized'],
+  operations: ['OnDigitSelected', 'OnLetterMovedToBin', 'OnLetterCollected', 'OnPassComplete', 'OnRadixSortComplete', 'OnLettersInitialized'],
   explanationRules: {
     empty: "The objective is to find the goal node",
     hasItems: "TODO",

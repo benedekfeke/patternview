@@ -25,16 +25,14 @@ export const queueConfig: AlgorithmConfig = {
 
   pseudocodes: {
     Enqueue: {
-      title: "Add item to queue",
-      code: `function Enqueue(item) {<br/>&nbsp;&nbsp;queue.push(item);<br/>}`,
-      tooltip: `When you enqueue, you place a new element at the back (rear) of the queue.
-      Analogy: Imagine joining a line at a ticket counter. You go to the end of the line and wait for your turn.`
+      title: "Add item to rear of queue",
+      code: `<span class="keyword">function</span> <span class="fn">Enqueue</span>(item) {<br/>&nbsp;&nbsp;queue[rear] ← item<br/>&nbsp;&nbsp;rear ← rear + 1<br/>&nbsp;&nbsp;size ← size + 1<br/>}`,
+      tooltip: `<b>Enqueue</b> adds a new element to the back (rear) of the queue.<br/><br/><i>Analogy:</i> Like joining a line at a ticket counter — you go to the end and wait your turn.`
     },
     Dequeue: {
-      title: "Remove item from queue",
-      code: `function Dequeue() {<br/>&nbsp;&nbsp;return queue.shift();<br/>}`,
-      tooltip: `When you dequeue, you remove the element at the front of the queue.
-      Analogy: The person at the front of the line gets served and leaves the line.`
+      title: "Remove item from front of queue",
+      code: `<span class="keyword">function</span> <span class="fn">Dequeue</span>() {<br/>&nbsp;&nbsp;<span class="keyword">if</span> (size == 0) <span class="keyword">return null</span><br/>&nbsp;&nbsp;item ← queue[front]<br/>&nbsp;&nbsp;front ← front + 1<br/>&nbsp;&nbsp;size ← size - 1<br/>&nbsp;&nbsp;<span class="keyword">return</span> item<br/>}`,
+      tooltip: `<b>Dequeue</b> removes and returns the element at the front of the queue.<br/><br/><i>Analogy:</i> The person at the front of the line gets served and leaves.`
     }
   },
   operations: ['Enqueue', 'Dequeue'],

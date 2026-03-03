@@ -18,50 +18,43 @@ export const pathfindingConfig: AlgorithmConfig = {
   ],
   pseudocodes: {
     OnSceneRestarted: {
-      title: "Reset game with current graph",
-      code: `function Reset()`,
-      tooltip: `Resets the current pathfinding session while keeping the same graph structure. Clears all visited nodes and paths.`
+      title: "Reset pathfinding state",
+      code: `<span class="keyword">function</span> <span class="fn">Reset</span>() {<br/>&nbsp;&nbsp;visited[] ← <span class="keyword">false</span><br/>&nbsp;&nbsp;distances[] ← ∞<br/>&nbsp;&nbsp;previous[] ← <span class="keyword">null</span><br/>}`,
+      tooltip: `Resets all nodes to their initial state. All distances are set to infinity, all visited flags cleared, and path references removed.`
     },
     OnGraphRandomized: {
-      title: "Generate a new graph with randomized nodes and connections",
-      code: `function GenerateNewGraph(int nodeCount)`,
-      tooltip: `Creates a completely new random graph with the specified number of nodes and weighted edges.`
+      title: "Generate random weighted graph",
+      code: `<span class="keyword">function</span> <span class="fn">GenerateGraph</span>(nodeCount) {<br/>&nbsp;&nbsp;nodes ← <span class="fn">createNodes</span>(nodeCount)<br/>&nbsp;&nbsp;edges ← <span class="fn">connectNodes</span>(nodes)<br/>&nbsp;&nbsp;<span class="keyword">return</span> Graph(nodes, edges)<br/>}`,
+      tooltip: `Creates a new random graph with the specified number of nodes. Each edge has a randomly assigned weight representing the cost to traverse it.`
     },
     OnStepForward: {
-      title: "Step until the goal node is not found",
-      code: `function StepForward() {<br/>&nbsp;&nbsp;foreach (var edge in current.edges)<br/>&nbsp;&nbsp;{<br/>&nbsp;&nbsp;&nbsp;&nbsp;Node neighbor = edge.GetOtherNode(current);<br/>&nbsp;&nbsp;&nbsp;&nbsp;if (!neighbor.visited)<br/>&nbsp;&nbsp;&nbsp;&nbsp;{<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;float newDist = current.distance + edge.weight;<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if (newDist &lt; neighbor.distance)<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;neighbor.distance = newDist;<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;neighbor.previous = current;<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br/>&nbsp;&nbsp;&nbsp;&nbsp;}<br/>&nbsp;&nbsp;}<br/>}`,
-      tooltip: `Stepping forward - searching for all the neighbors of the current node and "exploring them" one by one.`
+      title: "Explore neighbors of current node",
+      code: `<span class="keyword">function</span> <span class="fn">StepForward</span>(current) {<br/>&nbsp;&nbsp;<span class="keyword">for each</span> edge <span class="keyword">in</span> current.edges {<br/>&nbsp;&nbsp;&nbsp;&nbsp;neighbor ← edge.getOtherNode(current)<br/>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (!neighbor.visited) {<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;newDist ← current.dist + edge.weight<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span> (newDist &lt; neighbor.dist) {<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;neighbor.dist ← newDist<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;neighbor.prev ← current<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br/>&nbsp;&nbsp;&nbsp;&nbsp;}<br/>&nbsp;&nbsp;}<br/>}`,
+      tooltip: `<b>Relaxation step</b> in Dijkstra's algorithm. For each unvisited neighbor, we check if going through the current node provides a shorter path. If so, we update the distance and store the path.`
     },
     OnNoPathExists: {
-      title: "No path exists further",
-      code: `if (current.distance == Mathf.Infinity)<br/>
-      &nbsp;&nbsp;emit NoPathFound<br/>
-      &nbsp;&nbsp;break<br/>`,
-      tooltip: `It's good practice to initialize the node distances to Infinity, so if we can not measure a smaller than infinity distance between 2 nodes, we can conclude that no path exists between the 2 nodes.`,
+      title: "No path exists to goal",
+      code: `<span class="keyword">if</span> (current.dist == ∞) {<br/>&nbsp;&nbsp;<span class="fn">emit</span>(<span class="string">'NoPathFound'</span>)<br/>&nbsp;&nbsp;<span class="keyword">break</span><br/>}`,
+      tooltip: `When all reachable nodes have been visited and the goal's distance remains infinity, it means no path exists between start and goal nodes.`,
     },
     OnAlgoPathFound: {
-      title: "Algorithm found optimal path",
-      code: `while (unvisitedNodes.Count > 0)<br/>
-      &nbsp;&nbsp;currentNode ← StepForward()<br/>,
-      &nbsp;&nbsp;currentNode.visited ← true<br/>,
-      &nbsp;&nbsp;if (currentNode == goalNode)
-      &nbsp;&nbsp;&nbsp;&nbsp;emit AlgorithmPathFound
-      &nbsp;&nbsp;&nbsp;&nbsp;break<br/>`,
-      tooltip: `A shortest path algorithm (Dijkstra's algorithm in our case, see more in description above) found the shortest path from <b>startNode<b/> to <b>goalNode<b/>.`,
+      title: "Shortest path found by algorithm",
+      code: `<span class="keyword">while</span> (unvisited.length &gt; 0) {<br/>&nbsp;&nbsp;current ← <span class="fn">getMinDistance</span>(unvisited)<br/>&nbsp;&nbsp;current.visited ← <span class="keyword">true</span><br/>&nbsp;&nbsp;<span class="keyword">if</span> (current == goal) {<br/>&nbsp;&nbsp;&nbsp;&nbsp;<span class="fn">emit</span>(<span class="string">'PathFound'</span>)<br/>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">break</span><br/>&nbsp;&nbsp;}<br/>&nbsp;&nbsp;<span class="fn">StepForward</span>(current)<br/>}`,
+      tooltip: `Dijkstra's algorithm found the optimal shortest path. The algorithm always picks the unvisited node with the smallest distance, guaranteeing the shortest path.`,
     },
     OnPlayerPathFound: {
-      title: "Player found a path",
-      code: `// Player reached goal node`,
-      tooltip: `The player manually navigated to the goal node using a greedy approach (always choosing the nearest unvisited neighbor).`
+      title: "Player reached the goal",
+      code: `<span class="comment">// Player navigated to goal</span><br/>playerPath ← <span class="fn">reconstructPath</span>(goal)<br/>playerDist ← goal.dist`,
+      tooltip: `The player manually selected nodes to reach the goal. This path may be longer than optimal since humans often use a <b>greedy approach</b> (picking the nearest visible node).`
     },
     PathsComparison: {
-      title: "Compare paths",
-      code: `// Comparing greedy vs Dijkstra`,
-      tooltip: `Compares the player's greedy path length against Dijkstra's optimal shortest path to show the difference in efficiency.`
+      title: "Compare greedy vs optimal paths",
+      code: `<span class="comment">// Path length comparison</span><br/>difference ← playerDist - algoDist<br/>efficiency ← algoDist / playerDist * 100`,
+      tooltip: `Compares the player's path length against Dijkstra's optimal path. Shows how close the greedy approach got to the mathematically shortest route.`
     }
   },
   //TODO: get comparison of dijkstra vs greedy(user) pathlenghts from dispatch
-  operations: ['OnSceneRestarted', 'OnGraphRandomized', 'OnStepForward', 'OnNoPathExists', 'PathsComparison'],
+  operations: ['OnSceneRestarted', 'OnGraphRandomized', 'OnStepForward', 'OnNoPathExists', 'OnAlgoPathFound', 'OnPlayerPathFound', 'PathsComparison'],
   explanationRules: {
     empty: "The objective is to find the goal node",
     hasItems: "TODO",

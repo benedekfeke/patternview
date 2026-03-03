@@ -15,39 +15,39 @@ export const trieConfig: AlgorithmConfig = {
   ],
   pseudocodes: {
       OnAuthorRandomized: {
-        title: 'Initialize search and reset to root node',
-        code: `currentNode ← self.root</br>index ← 0`,
-        tooltip: `We set the currently selected node to the root node and reset the index counter to start searching from the beginning of the target word.`
+        title: 'Reset search to root node',
+        code: `currentNode ← trie.root<br/>index ← 0<br/>target ← <span class="fn">getRandomAuthor</span>()`,
+        tooltip: `Initializes a new search by resetting to the root node and selecting a random target author name. The search will proceed character by character from index 0.`
       },
       OnShelfSelected: {
-        title: "Level 0: Match character at current index",
-        code: `currentNode ← currentNode.getChildren()[target[index]]</br>index ← index + 1`,
-        tooltip: `Access the first level of the trie. We traverse to the child node matching the current character and advance the index.`
+        title: "Traverse to first character (depth 1)",
+        code: `<span class="comment">// Match character at index 0</span><br/>char ← target[index]<br/>currentNode ← currentNode.children[char]<br/>index ← index + 1`,
+        tooltip: `<b>First level traversal.</b> From the root, we follow the edge labeled with the first character of our target word. Each shelf represents a possible first letter.`
       },
       OnColumnSelected: {
-        title: "Level 1: Continue traversal down the trie",
-        code: `currentNode ← currentNode.getChildren()[target[index]]</br>index ← index + 1`,
-        tooltip: `Access the second level of the trie. We continue traversing deeper for the next character in the target word.`
+        title: "Traverse to second character (depth 2)",
+        code: `<span class="comment">// Match character at index 1</span><br/>char ← target[index]<br/>currentNode ← currentNode.children[char]<br/>index ← index + 1`,
+        tooltip: `<b>Second level traversal.</b> We continue down the trie by matching the second character. Only children of the previous node are considered.`
       },
       OnRowSelected: {
-        title: "Level 2+: Traverse remaining character levels",
-        code: `currentNode ← currentNode.getChildren()[target[index]]</br>index ← index + 1`,
-        tooltip: `Access deeper levels of the trie. We continue matching subsequent characters until we reach the end of the target word.`
+        title: "Traverse deeper levels (depth 3+)",
+        code: `<span class="comment">// Match character at current index</span><br/>char ← target[index]<br/>currentNode ← currentNode.children[char]<br/>index ← index + 1`,
+        tooltip: `<b>Deeper traversal.</b> The trie search continues matching subsequent characters. Each level narrows down the possible words that share the current prefix.`
       },
       OnBookSelected: {
-        title: "Validate character exists before traversal",
-        code: `if target[index] in currentNode.getChildren() then</br>  currentNode ← currentNode.getChildren()[target[index]]</br>  index ← index + 1</br>else</br>  return false`,
-        tooltip: `Check if the next character exists in the trie before moving forward. If not found, the word doesn't exist and we return false.`
+        title: "Validate and traverse to character",
+        code: `char ← target[index]<br/><span class="keyword">if</span> (char <span class="keyword">in</span> currentNode.children) {<br/>&nbsp;&nbsp;currentNode ← currentNode.children[char]<br/>&nbsp;&nbsp;index ← index + 1<br/>} <span class="keyword">else</span> {<br/>&nbsp;&nbsp;<span class="keyword">return</span> <span class="keyword">false</span> <span class="comment">// Word not found</span><br/>}`,
+        tooltip: `Before traversing, we verify the character exists as a child. If the character is missing from the trie at this position, the target word doesn't exist in our dictionary.`
       },
       OnHintChildren: {
-        title: "Display available next characters",
-        code: `availableChars ← currentNode.getChildren().keys()</br>hint ← availableChars`,
-        tooltip: `Show all possible next characters that can be traversed from the current node. Useful for understanding valid continuations.`
+        title: "Display available child characters",
+        code: `availableChars ← currentNode.children.<span class="fn">keys</span>()<br/><span class="fn">displayHint</span>(availableChars)`,
+        tooltip: `Shows all valid next characters from the current position. Useful for autocomplete — these are all possible continuations of the current prefix.`
       },
       OnAuthorFound: {
-        title: 'Validate word end and return success',
-        code: `if currentNode.isWordEnd() then</br>  return true</br>else</br>  return false`,
-        tooltip: `After traversing all characters, check if the final node is marked as the end of a word. Only then have we successfully found the target.`
+        title: 'Verify word exists in trie',
+        code: `<span class="keyword">if</span> (currentNode.isEndOfWord) {<br/>&nbsp;&nbsp;<span class="fn">emit</span>(<span class="string">'WordFound'</span>)<br/>&nbsp;&nbsp;<span class="keyword">return</span> <span class="keyword">true</span><br/>} <span class="keyword">else</span> {<br/>&nbsp;&nbsp;<span class="keyword">return</span> <span class="keyword">false</span> <span class="comment">// Only a prefix</span><br/>}`,
+        tooltip: `After traversing all characters, we check the <b>isEndOfWord</b> flag. A path existing isn't enough — the word must be explicitly marked as complete. Otherwise, we only found a prefix of another word.`
       },
     },
     operations: ['OnShelfSelected', 'OnColumnSelected', 'OnRowSelected', 'OnBookSelected', 'OnAuthorFound', 'OnHintChildren', 'OnAuthorRandomized'],
