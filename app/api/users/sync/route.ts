@@ -19,7 +19,6 @@ export async function POST(req: Request) {
       return NextResponse.json({error: 'Failed to sync user'}, {status: 404})
     }
 
-    console.log('DB result:', result);
 
     return NextResponse.json({ ok: true, user: result });
   } catch (e: any) {

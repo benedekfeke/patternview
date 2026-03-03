@@ -34,8 +34,6 @@ export default function Profile() {
           age: data.user.age ? String(data.user.age) : ''
         });
 
-        console.log(userData);
-
       } catch (e) {
         console.error("failed to fetch get user:", e);
         setUserData({

@@ -20,7 +20,6 @@ export async function GET() {
       return NextResponse.json({error: 'User not found'}, {status: 404});
     }
 
-    console.log(user)
     return NextResponse.json({success: true, user});
   } catch (error) {
     console.error("Error fetching user", error);
