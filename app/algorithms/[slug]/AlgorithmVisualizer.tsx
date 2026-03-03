@@ -60,7 +60,7 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
 
       const bookList = books.length > 0
         ? books.map(b => `- ${b.title} (${b.first_publish_year || 'N/A'})`).join('\n')
-        : 'No books found(OpenLibrary|Gemini';
+        : 'No books found(OpenLibrary|Gemini)';
 
       goeyToast.info(`You've found a famous writer: ${foundAuthor}`, {
         description: `The most famous books/publications by this author: \n${bookList}`,
@@ -225,15 +225,15 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
         <div className="w-80 flex flex-col gap-3 pointer-events-auto justify-center overflow-y-auto py-4">
           
           {/* Explanation Panel - PRIMARY FOCUS */}
-          <div className="p-6 rounded-2xl bg-gradient-to-br from-blue-900/40 to-purple-900/30 border-2 border-blue-400/60 shadow-lg shadow-blue-500/20 hover:border-blue-300 hover:shadow-blue-400/30 hover:rounded-none transition-all duration-200 overflow-auto min-h-[300px]">
+          <div className="p-6 rounded-2xl bg-linear-to-br from-blue-900/40 to-purple-900/30 border-2 border-blue-400/60 shadow-lg shadow-blue-500/20 hover:border-blue-300 hover:shadow-blue-400/30 hover:rounded-none transition-all duration-200 overflow-auto min-h-75">
           <code className='text-blue-100 text-base font-medium'>{explanation}</code>
           {showSnippet && (
-            <div className='overflow-auto'>
+            <div className='overflow-x-visible'>
             <pre className="py-4 mt-3 border-t-2 border-blue-300/40" 
             data-tooltip-content={`${snippetTooltip}`} 
             data-tooltip-id='my-tooltip' data-tooltip-place='left' data-tooltip-delay-hide={400}>
               <code
-                className="text-white mt-2 text-sm font-mono"
+                className="text-white my-3 text-sm font-mono"
                 dangerouslySetInnerHTML={{ __html: safeSanitize(snippet) }}
               />
             </pre>
@@ -284,7 +284,7 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex justify-between items-center mb-4 pointer-events-auto">
-                <h2 className="text-2xl font-bold text-accent border-1 rounded-2xl px-4">{config.title}</h2>
+                <h2 className="text-2xl font-bold text-accent border rounded-2xl px-4">{config.title}</h2>
                 <Button size={'sm'} className='rounded-4xl w-auto hover:cursor-pointer hover:text-destructive hover:shadow-destructive' variant={'outline'} onClick={() => setIsModalOpen(false)}>
                   <X size={16}/>
                 </Button>
