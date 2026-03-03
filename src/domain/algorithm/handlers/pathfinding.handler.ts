@@ -27,7 +27,7 @@ export const pathfindingHandler: AlgorithmHandler = {
       case 'player':
         return "Graph is generated, find the goal node"
       case 'idle':
-        return "Press 'Space' to step forward";
+        return "Move with WASD keys, after you've found the goal, press 'Space' to view the path expansion";
       case 'searching':
         return `Searching... Visited ${pfState.nodesVisited} nodes using ${pfState.currentAlgorithm}`;
       case 'playerFound':

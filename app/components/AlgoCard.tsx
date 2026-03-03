@@ -48,7 +48,7 @@ export default function AlgoCard({lottie, slug, name, isLoggedIn}: AlgoCardProps
     <Card style={{
       transform: `perspective(1000px) rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`,transition: "all 0.4s ease-out", willChange: "transform"
     }} 
-    className={`relative max-w-60 rounded-4xl hover:mx-12 max-h-100 hover:text-card text-card-foreground hover:rounded-none pointer-events-auto overflow-hidden bg-white/30 ${isLoggedIn ? "hover:bg-radial-[at_50%_85%] from-sky-200 via-purple-400 to-gray-800 to-90% hover:opacity-100" : ""}`}
+    className={`relative max-w-60 rounded-4xl hover:mx-0.5 max-h-100 hover:text-card text-card-foreground hover:rounded-none pointer-events-auto overflow-hidden bg-white/30 ${isLoggedIn ? "hover:bg-radial-[at_50%_85%] from-sky-200 via-purple-400 to-gray-800 to-90% hover:opacity-100" : ""}`}
     onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => {setIsHovered(false); resetRotation()}}
     onMouseMove={handleMouseMove}
 

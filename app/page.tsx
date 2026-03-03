@@ -73,8 +73,8 @@ export default async function Home() {
             <br/>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5 md:gap-8 w-full">
-            <div className="col-span-full flex flex-wrap justify-center gap-5 md:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-2 md:gap-4 w-full">
+            <div className="col-span-full flex flex-wrap justify-center gap-2 md:gap-4">
               {algorithms.map((algo) => (
                 <AlgoCard
                   key={algo.slug} 
