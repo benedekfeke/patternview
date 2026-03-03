@@ -174,6 +174,23 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
   const sendZipCodesToUnity = useCallback(() => {
     if (!unityIsLoaded || currentScene !== 'RadixSort') return;
     const zipArray = Zipcodes.split(',').map(s => s.trim()).filter(Boolean);
+    
+    // Validate that all elements are 5-digit numbers
+    const isValid = zipArray.length > 0 && zipArray.every(zip => /^\d{5}$/.test(zip));
+    
+    if (!isValid) {
+      goeyToast.error('Invalid Input', {
+        description: 'Please enter comma-separated 5-digit numbers.',
+        borderColor: '#ef4444',
+        borderWidth: 1.5,
+        bounce: 0.75,
+        timing: {
+          displayDuration: 5000,
+        },
+      });
+      return;
+    }
+    
     console.log(JSON.stringify(zipArray));
     // RadixGameManager script is attached to GameManager object (we have to call the object)
     sendMessage("GameManager", "SetInputFromFrontend", JSON.stringify(zipArray));
@@ -207,17 +224,16 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
         {/* Side Panel */}
         <div className="w-80 flex flex-col gap-3 pointer-events-auto justify-center overflow-y-auto py-4">
           
-          {/* Explanation Panel */}
-          <div className="p-4 rounded-2xl border-2 border-dashed border-white  text-primary hover:border-2 hover:rounded-none transition-all
-          duration-200 overflow-auto">
-          <code className='text-blue-200 text-sm border-b-white/80'>{explanation}</code>
+          {/* Explanation Panel - PRIMARY FOCUS */}
+          <div className="p-6 rounded-2xl bg-gradient-to-br from-blue-900/40 to-purple-900/30 border-2 border-blue-400/60 shadow-lg shadow-blue-500/20 hover:border-blue-300 hover:shadow-blue-400/30 hover:rounded-none transition-all duration-200 overflow-auto min-h-[300px]">
+          <code className='text-blue-100 text-base font-medium'>{explanation}</code>
           {showSnippet && (
             <div className='overflow-auto'>
-            <pre className="py-4 mt-2 border-t border-white/30" 
+            <pre className="py-4 mt-3 border-t-2 border-blue-300/40" 
             data-tooltip-content={`${snippetTooltip}`} 
             data-tooltip-id='my-tooltip' data-tooltip-place='bottom' data-tooltip-delay-hide={400}>
               <code
-                className="text-white mt-2 text-sm "
+                className="text-white mt-2 text-sm font-mono"
                 dangerouslySetInnerHTML={{ __html: safeSanitize(snippet) }}
               />
             </pre>
@@ -226,14 +242,14 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
             </div>
           )}
           </div>
-          {/* Description Panel */}
-          <div className=" p-4 rounded-2xl text-white font-[family-name:var(--font-sf)]  bg-white/10 hover:border-1 hover:rounded-none hover:border-white transition-all duration-200">
-            <h2 className='text-lg font-bold mb-2'>{config.title}</h2>
-            <p className='text-sm' dangerouslySetInnerHTML={{ __html: safeSanitize(config.description) }} />
+          {/* Description Panel - SECONDARY */}
+          <div className="p-3 rounded-2xl text-white/80 font-(family-name:--font-sf) bg-white/5 border border-white/20 hover:bg-white/10 hover:rounded-none transition-all duration-200">
+            <h2 className='text-base font-semibold mb-1.5 text-white/90'>{config.title}</h2>
+            <p className='text-xs leading-relaxed' dangerouslySetInnerHTML={{ __html: safeSanitize(config.description) }} />
 
             <Button 
               onClick={() => setIsModalOpen(true)}
-              className="mt-4 bg-white/20 hover:bg-black text-white rounded-2xl px-4 py-2 transition-all duration-300 cursor-pointer border border-white/30 hover:rounded-none"
+              className="mt-2 bg-white/10 hover:bg-white/20 text-white/70 hover:text-white text-xs rounded-2xl px-3 py-1.5 transition-all duration-300 cursor-pointer border border-white/20 hover:rounded-none"
               >
               More Info
             </Button>
@@ -246,10 +262,10 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setZipCodes(e.target.value)}
                 placeholder='Comma-separated 5-digit number'
                 onKeyDown={(e) => {if (e.key === 'Enter') sendZipCodesToUnity();}}
-                className='w-full rounded-2xl text-white focus:rounded-none border-white border-1 transition-all duration-200 text-sm p-2'
+                className='w-full rounded-2xl text-white focus:rounded-none border-white border transition-all duration-200 text-sm p-2'
               />
               <Button onClick={sendZipCodesToUnity}
-              className='p-4 w-full items-center border-1 rounded-2xl transition-all duration-200 hover:rounded-none bg-blue-500/60 text-white hover:bg-blue-200 hover:text-black'
+              className='p-4 w-full items-center border rounded-2xl transition-all duration-200 hover:rounded-none bg-blue-500/60 text-white hover:bg-blue-200 hover:text-black'
               >
                 <Send size={16} strokeWidth={0.8}/>
                 Send to game</Button>
@@ -264,7 +280,7 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
             onClick={() => setIsModalOpen(false)}
           >
             <div 
-              className="bg-black/50 rounded-2xl p-6 max-h-[80vh] w-auto max-w-[70vw] overflow-y-auto animate-fadeIn border-1 border-white"
+              className="bg-black/50 rounded-2xl p-6 max-h-[80vh] w-auto max-w-[70vw] overflow-y-auto animate-fadeIn border border-white"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex justify-between items-center mb-4 pointer-events-auto">
