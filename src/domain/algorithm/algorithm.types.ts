@@ -19,6 +19,7 @@ export interface AlgorithmConfig {
   sceneName: string;
   title: string;
   description: string;
+  instructions: string;
   modalDescription?: DescriptionSegment[];
   operations: string[];
   pseudocodes: Record<string, Pseudocode>;

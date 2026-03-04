@@ -3,6 +3,7 @@ import { AlgorithmConfig } from '../algorithm.types';
 // TODO: figure out how to edit this page from /dashboard/page
 export const radixSortConfig: AlgorithmConfig = {
   sceneName: 'RadixSort',
+  instructions: 'Instructions: Step through the visualization pressing "Space" to step forward. The goal is to observe how radix sort processes the digits one by one.',
   title: 'Sorting Algorithm',
   description: `<a href='https://en.wikipedia.org/wiki/Pathfinding' class="link-hover">Radix Sort</a> is considered one of the fastests sorting algorithms. It avoids comparison by creating and <a href='https://en.wikipedia.org/wiki/Distribution_sort' class="link-hover">distributing</a> elements into buckets (or bins) according to their <a href='https://en.wikipedia.org/wiki/Radix' class="link-hover">radix</a>. This bucketing proces is repeated for each digit, while preserving the ordering of the prior step, until all digits have been considered. Radix sort can be applied to data that can be sorted <a href='https://en.wikipedia.org/wiki/Lexicographical_order' class="link-hover">lexicographically</a>.`,
   modalDescription: [

@@ -132,7 +132,7 @@ export const pathfindingHandler: AlgorithmHandler = {
             message: message,
           },
           explanation: '',
-          snippet: "Comparing your solution (greedy approach, see Description) vs algorithm solution (Unified cost search, Dijkstra's algorithm..."
+          snippet: "Comparing your solution (greedy approach, see Description) vs <br/>pathfinding algorithm solution (Unified cost search, Dijkstra's algorithm...)"
         }
       default:
         return {newState: state, explanation: message || 'Unknown operation'};

@@ -3,6 +3,7 @@ import { AlgorithmConfig } from '../algorithm.types';
 // TODO: figure out how to edit this page from /dashboard/page
 export const pathfindingConfig: AlgorithmConfig = {
   sceneName: 'Pathfinding',
+  instructions: 'Instructions: Find the Goal Node with the car (marked with red color), using WASD controls. Once found, follow the next instructions in the game.',
   title: 'Pathfinding algorithm',
   description: `<a href='https://en.wikipedia.org/wiki/Pathfinding' class="link-hover">PATHFINDING</a> algorithms find the shortest path between two points in a graph or grid.`,
   modalDescription: [
