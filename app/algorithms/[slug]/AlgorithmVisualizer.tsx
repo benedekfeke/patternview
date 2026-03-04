@@ -42,6 +42,7 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
   const [isLoaded, setIsLoaded] = useState(false);
   const [currentScene, setCurrentScene] = useState<string>('');
   const [Zipcodes, setZipCodes] = useState<string>('');
+  const [instrucitonsVisible, setInstructionsVisible] = useState<boolean>(false);
   // state to check if component is mounded
   const [mounted, setMounted] = useState(false);
 
@@ -116,6 +117,7 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
         if (isSubscribed) {
           setCurrentScene(config.sceneName);
           setIsLoaded(true);
+          setInstructionsVisible(true);
         }
       } catch (error) {
         console.log(`Failed to load ${config.sceneName} scene: `, error);
@@ -295,6 +297,43 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
                 ) : (
                   <p>Additional information about {config.title}...</p>
                 )}
+              </div>
+            </div>
+          </div>,
+          document.body
+        )}
+
+        {/* Instructions Overlay */}
+        {instrucitonsVisible && config.instructions && createPortal(
+          <div 
+            className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 animate-fadeIn"
+            onClick={() => setInstructionsVisible(false)}
+          >
+            <div 
+              className="bg-linear-to-br from-blue-900/90 to-purple-900/80 rounded-2xl p-8 max-w-lg mx-4 shadow-2xl border border-blue-400/50 animate-fadeIn"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex justify-between items-start mb-4">
+                <h2 className="text-xl font-bold text-white">Instructions</h2>
+                <Button 
+                  size={'sm'} 
+                  className='rounded-full w-8 h-8 p-0 hover:cursor-pointer hover:bg-red-500/50 hover:text-white transition-colors' 
+                  variant={'outline'} 
+                  onClick={() => setInstructionsVisible(false)}
+                >
+                  <X size={16}/>
+                </Button>
+              </div>
+              <p className="text-white/90 text-base leading-relaxed">
+                {config.instructions}
+              </p>
+              <div className="mt-6 flex justify-center">
+                <Button 
+                  onClick={() => setInstructionsVisible(false)}
+                  className="bg-blue-500 hover:bg-blue-400 text-white px-6 py-2 rounded-xl transition-all duration-200 hover:rounded-none"
+                >
+                  Got it!
+                </Button>
               </div>
             </div>
           </div>,
