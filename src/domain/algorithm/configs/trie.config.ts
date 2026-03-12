@@ -3,7 +3,7 @@ import { AlgorithmConfig } from "../algorithm.types";
 export const trieConfig: AlgorithmConfig = {
   sceneName: 'Trie',
   title: 'Trie Data Structure',
-  instructions: 'Instructions: Find the target name, select the currently highlighted shelf/column/row/book to match the highlighted character on top. Move with WASD, select with "Space".',
+  instructions: 'Instructions: Imagine you are in a virtual library, your goal is to find an author\'s name that you saw somewhere, the trie data structure acts just like a librarian, but the trie is much more powerful.Sselect the currently highlighted letter(on top) by selecting the objects in order: shelf->column->row->book. Move with WASD, select with "Space".',
   description: `A trie (pronounced “try”) is a tree-based data structure that stores strings efficiently by sharing common prefixes. Also called a prefix tree, a trie enables fast string search, insertion, and deletion operations in O(L) time, where L is the string length.`,
   modalDescription: [
     { text: 'A ' },
