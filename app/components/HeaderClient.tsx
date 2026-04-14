@@ -26,8 +26,6 @@ export default function HeaderClient({user}: {user: User | null}) {
         headers: {
           "Content-Type": "application/json"},
         body: JSON.stringify({
-          sub: user?.sub,
-          email: user?.email,
           username: user?.username
         })
         

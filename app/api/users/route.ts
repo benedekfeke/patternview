@@ -1,6 +1,8 @@
 import { auth0 } from "@/lib/auth0";
 import { userRepository } from "@/src/adapters/database/user.repository";
-import { UpdateUserInput } from "@/src/domain/user/user.types";
+import { checkRateLimit } from "@/src/shared/security/rate-limit";
+import { clientIpFromRequest, enforceSameOrigin } from "@/src/shared/security/request-guards";
+import { validateUserFieldUpdate } from "@/src/shared/security/validation";
 import { NextRequest, NextResponse } from "next/server";
 
 
@@ -31,6 +33,10 @@ export async function GET() {
 }
 
 export async function PUT(req: NextRequest) {
+  if (!enforceSameOrigin(req)) {
+    return NextResponse.json({ error: "Invalid request origin" }, { status: 403 });
+  }
+
   const session = await auth0.getSession();
   const user = session?.user;
 
@@ -38,10 +44,27 @@ export async function PUT(req: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { field, value } = (await req.json()) as { 
-    field: keyof UpdateUserInput; 
-    value: string 
-  };
+  const ip = clientIpFromRequest(req);
+  const rateLimit = checkRateLimit(`users:put:${user.sub}:${ip}`, 20, 60_000);
+  if (!rateLimit.ok) {
+    return NextResponse.json(
+      { error: "Too many requests" },
+      {
+        status: 429,
+        headers: {
+          "Retry-After": String(rateLimit.retryAfterSeconds),
+        },
+      }
+    );
+  }
+
+  const body = await req.json().catch(() => null);
+  const validated = validateUserFieldUpdate(body);
+  if (!validated) {
+    return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
+  }
+
+  const { field, value } = validated;
 
   try {
     // check user exists

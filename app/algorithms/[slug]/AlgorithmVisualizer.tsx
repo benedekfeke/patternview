@@ -1,8 +1,6 @@
 'use client';
-import { fetchAuthorBooks } from '@/app/api/authorBookUtil';
 import DescriptionModal from '@/app/components/DescriptionModal';
 import { Button } from '@/app/components/button';
-import '@/app/components/css/reactTooltip.css';
 import { useSharedUnity } from '@/src/adapters/unity/UnityProvider';
 import { AlgorithmState } from '@/src/domain/algorithm/algorithm.handler';
 import { AlgorithmConfig } from '@/src/domain/algorithm/algorithm.types';
@@ -13,12 +11,29 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { Tooltip } from 'react-tooltip';
 import { GoeyToaster, goeyToast } from 'goey-toast';
-import 'goey-toast/styles.css';
-import 'react-tooltip/dist/react-tooltip.css';
 import { Unity } from 'react-unity-webgl';
 interface AlgorithmVisualizerProps {
   config: AlgorithmConfig,
   className?: string;
+}
+
+type Book = {
+  title: string;
+  first_publish_year?: number;
+};
+
+async function fetchAuthorBooks(authorName: string): Promise<Book[]> {
+  const response = await fetch(`/api/books?author=${encodeURIComponent(authorName)}`, {
+    method: 'GET',
+    cache: 'no-store',
+  });
+
+  if (!response.ok) {
+    return [];
+  }
+
+  const data = (await response.json()) as { books?: Book[] };
+  return Array.isArray(data.books) ? data.books : [];
 }
 
 function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisualizerProps) {
@@ -227,7 +242,7 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
         <div className="w-80 flex flex-col gap-3 pointer-events-auto justify-center overflow-y-auto py-4">
           
           {/* Explanation Panel - PRIMARY FOCUS */}
-          <div className="p-6 rounded-2xl bg-linear-to-br from-blue-900/40 to-purple-900/30 border-2 border-blue-400/60 shadow-lg shadow-blue-500/20 hover:border-blue-300 hover:shadow-blue-400/30 hover:rounded-none transition-all duration-200 overflow-auto min-h-75">
+          <div className="p-6 rounded-2xl bg-black border-2 border-blue-400/80 shadow-lg shadow-blue-500/20 hover:border-blue-300 hover:shadow-blue-400/30 hover:rounded-none transition-all duration-200 overflow-auto min-h-75">
           <code className='text-blue-100 text-base font-medium'>{explanation}</code>
           {showSnippet && (
             <div className='overflow-x-visible'>
@@ -245,7 +260,7 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
           )}
           </div>
           {/* Description Panel - SECONDARY */}
-          <div className="p-3 rounded-2xl text-white/80 font-(family-name:--font-sf) bg-white/5 border border-white/20 hover:bg-white/10 hover:rounded-none transition-all duration-200">
+          <div className="p-3 rounded-2xl text-white/90 font-(family-name:--font-sf) bg-black border border-white/20 hover:rounded-none transition-all duration-200">
             <h2 className='text-base font-semibold mb-1.5 text-white/90'>{config.title}</h2>
             <p className='text-xs leading-relaxed' dangerouslySetInnerHTML={{ __html: safeSanitize(config.description) }} />
 
@@ -310,19 +325,12 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
             onClick={() => setInstructionsVisible(false)}
           >
             <div 
-              className="bg-linear-to-br from-blue-900/90 to-purple-900/80 rounded-2xl p-8 max-w-lg mx-4 shadow-2xl border border-blue-400/50 animate-fadeIn"
+              className="bg-black rounded-3xl p-8 max-w-lg mx-4 shadow-2xl border border-white animate-fadeIn hover:rounded-none transition-all duration-100"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="flex justify-between items-start mb-4">
                 <h2 className="text-xl font-bold text-white">Instructions</h2>
-                <Button 
-                  size={'sm'} 
-                  className='rounded-full w-8 h-8 p-0 hover:cursor-pointer hover:bg-red-500/50 hover:text-white transition-colors' 
-                  variant={'outline'} 
-                  onClick={() => setInstructionsVisible(false)}
-                >
-                  <X size={16}/>
-                </Button>
+                
               </div>
               <p className="text-white/90 text-base leading-relaxed">
                 {config.instructions}
@@ -330,7 +338,7 @@ function AlgorithmVisualizer({config, className='w-full h-full'} : AlgorithmVisu
               <div className="mt-6 flex justify-center">
                 <Button 
                   onClick={() => setInstructionsVisible(false)}
-                  className="bg-blue-500 hover:bg-blue-400 text-white px-6 py-2 rounded-xl transition-all duration-200 hover:rounded-none"
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-xl transition-all duration-200 hover:rounded-none"
                 >
                   Got it!
                 </Button>
