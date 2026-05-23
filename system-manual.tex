@@ -1,0 +1,507 @@
+% !TEX root = ../thesis.tex
+
+\chapter{System Manual}\label{app:system.manual}
+
+This manual is intended for developers, system administrators, and those who want to deploy, modify, or extend the application. A basic understanding of web application development, Node.js, and databases is expected.
+
+\section{Introduction and Architecture Overview}
+
+The Patternview visualization tool is a modern web application built on a client-server architecture with an integrated visualization layer. A detailed description of the architecture, components, and design decisions is available in Chapter~\ref{ch:implementation} (Synthetic Part).
+
+\subsection{Technology Stack}
+
+\begin{table}[h]
+  \centering
+  \caption{Overview of technologies used in the project.}
+  \label{tab:tech_stack}
+  \renewcommand{\arraystretch}{1.2}
+  \begin{tabular}{|l|l|p{0.4\textwidth}|}
+    \hline
+    \textbf{Layer} & \textbf{Technology} & \textbf{Purpose} \\ \hline
+    Frontend & React 18 & UI components and state processing \\ \hline
+    Fullstack & Next.js 13+ & Server-side rendering, API routes, SSG \\ \hline
+    Typing & TypeScript & Type safety and IntelliSense \\ \hline
+    Visualization & Unity (WebGL) & 2D/3D graphics and interactions \\ \hline
+    Editor & MDX Editor & Text editor for taking notes \\ \hline
+    Authentication & Auth0 & Secure login and user management \\ \hline
+    AI Assistant & Google Gemini API & Text generation and analysis \\ \hline
+    Database & PostgreSQL (Neon) & Persistent data storage \\ \hline
+    Cache/Fallback & SQLite & Local temporary data \\ \hline
+    Hosting & Vercel & CI/CD and deployment \\ \hline
+    Sanitization & DOMPurify & XSS attack prevention \\ \hline
+    Styling & Tailwind CSS & Utility-first CSS framework \\ \hline
+    LFS Storage & Git LFS & Managing large binary files \\ \hline
+  \end{tabular}
+\end{table}
+
+\subsection{High-Level Architecture}
+
+The application consists of three main layers:
+
+\begin{itemize}
+  \item \textbf{Frontend (React/Next.js)} — User interface, state management, communication with the backend.
+  \item \textbf{Backend (Next.js API routes)} — Request processing, business logic, database management, integration with Auth0 and Gemini API.
+  \item \textbf{Visualization Layer (Unity WebGL)} — Graphics rendering, animations, user interactions.
+\end{itemize}
+
+\section{Installation of the Development Environment}
+
+\subsection{Requirements}
+
+Before starting, make sure you have the following installed:
+\begin{itemize}
+  \item \textbf{Node.js} version 22 or higher (LTS version recommended).
+  \item \textbf{npm} or \texttt{yarn} (usually included with Node.js).
+  \item \textbf{Git} for cloning the repository.
+  \item \textbf{Git LFS} — for managing large binary files (Unity builds, Lottie files).
+  \item \textbf{Unity} (version 6.000) — only if you are modifying visualizations.
+  \item \textbf{PostgreSQL} 17+ — for local development (optional, Neon cloud recommended).
+\end{itemize}
+
+Check the versions with the command:
+\begin{verbatim}
+node --version
+npm --version
+git --version
+git lfs version
+psql --version
+\end{verbatim}
+
+\subsection{Git LFS Installation}
+
+Git LFS (Large File Storage) is used to manage large binary files like Unity WebGL builds and Lottie animations. Installation:
+
+\textbf{On Windows:}
+\begin{verbatim}
+# Install Git LFS using the installer:
+# https://github.com/git-lfs/git-lfs/releases
+
+# Or using a package manager (Chocolatey):
+choco install git-lfs
+
+# Initialize Git LFS in the project:
+git lfs install
+\end{verbatim}
+
+\textbf{On macOS:}
+\begin{verbatim}
+brew install git-lfs
+git lfs install
+\end{verbatim}
+
+\textbf{On Linux:}
+\begin{verbatim}
+apt-get install git-lfs  # or yum install git-lfs
+git lfs install
+\end{verbatim}
+
+\subsubsection{Git LFS Configuration for the Project}
+
+The following files are already configured in \texttt{.gitattributes} in the project:
+
+\begin{verbatim}
+# Lottie animations
+*.lottie filter=lfs diff=lfs merge=lfs -text
+
+# Unity WebGL builds
+Build/*.js filter=lfs diff=lfs merge=lfs -text
+Build/*.wasm filter=lfs diff=lfs merge=lfs -text
+Build/*.gz filter=lfs diff=lfs merge=lfs -text
+
+# Video files
+*.mp4 filter=lfs diff=lfs merge=lfs -text
+\end{verbatim}
+
+If you need to add other file types to LFS:
+
+\begin{verbatim}
+# Add a new file type:
+git lfs track "*.extension"
+
+# Verify the configuration:
+cat .gitattributes
+\end{verbatim}
+
+If you are cloning the repository for the first time:
+
+\begin{verbatim}
+git clone https://github.com/benedekfeke/patternview.git
+cd patternview
+
+# Git LFS automatically downloads LFS files
+git lfs pull
+\end{verbatim}
+
+\subsection{Cloning the Repository}
+
+\begin{verbatim}
+git clone https://github.com/benedekfeke/patternview.git
+cd patternview
+
+# Ensure Git LFS has downloaded all LFS files
+git lfs pull
+\end{verbatim}
+
+\subsection{Installing Dependencies}
+
+\begin{verbatim}
+npm install
+# or
+yarn install
+\end{verbatim}
+
+This command installs all packages specified in \texttt{package.json}.
+
+\subsection{Environment Configuration}
+
+\subsubsection{Setting Environment Variables}
+
+Create a \texttt{.env.local} file in the project's root directory. You can find an example setup in \texttt{.env.local.example} (if it exists) or use the following template \textbf{with your own values}:
+
+\begin{verbatim}
+# Auth0 configuration — values can be found in the Auth0 dashboards
+AUTH0_SECRET='your_generated_secret_here'
+AUTH0_DOMAIN='dev-3rr1k8a2xf0olask.us.auth0.com'  # Tenant name
+AUTH0_CLIENT_ID='your_client_id_from_auth0'
+AUTH0_CLIENT_SECRET='your_client_secret_from_auth0'
+AUTH0_SYNC_SECRET='your_custom_sync_secret'
+APP_BASE_URL='http://localhost:3000'
+
+# Database — Neon cloud is recommended
+# Copy the connection string from the Neon dashboards
+POSTGRES_URL="postgresql://neondb_owner:your_password@ep-xxx.eu-central-1.aws.neon.tech/patternview?sslmode=require"
+
+# Alternatively: local PostgreSQL database
+# POSTGRES_URL="postgresql://postgres:your_password@localhost:5432/patternview"
+POSTGRES_URL_NON_POOLING="postgresql://postgres:your_password@localhost:5432/patternview"
+
+# Google Gemini API — create a key at https://ai.google.dev/
+NEXT_PUBLIC_GEMINI_API_KEY="your_gemini_api_key_here"
+
+# Development settings
+NEXT_PUBLIC_API_URL='http://localhost:3000/api'
+NODE_ENV='development'
+\end{verbatim}
+
+\textbf{⚠️ SECURITY ALERT:} Never share your \texttt{.env.local} and never commit it to Git. The file is in \texttt{.gitignore} and contains:
+\begin{itemize}
+  \item AUTH0 secrets — allow authentication.
+  \item Database passwords — access to data.
+  \item API keys — access to paid services.
+\end{itemize}
+
+\subsubsection{Auth0 Redirection}
+
+1. Log in to the Auth0 dashboard: \url{https://manage.auth0.com}.
+2. Navigate to \textbf{Applications → Your Application}.
+3. In \textbf{Settings}, set:
+   \begin{itemize}
+     \item \textbf{Allowed Callback URLs}: \texttt{http://localhost:3000/api/auth/callback}
+     \item \textbf{Allowed Logout URLs}: \texttt{http://localhost:3000}
+     \item \textbf{Allowed Web Origins}: \texttt{http://localhost:3000}
+   \end{itemize}
+4. Save the changes.
+
+\subsubsection{Google Gemini API}
+
+1. Go to \url{https://ai.google.dev/}.
+2. Create a new API key.
+3. Copy it into \texttt{NEXT\_PUBLIC\_GEMINI\_API\_KEY} in \texttt{.env.local}.
+
+\subsection{Database Setup}
+
+\subsubsection{Recommended: Cloud Database (Neon)}
+
+1. Visit \url{https://console.neon.tech}.
+2. Create a new project.
+3. Copy the connection string to \texttt{POSTGRES\_URL}.
+4. Apply the database schema:
+
+\begin{verbatim}
+# Execute SQL commands from pgTableCreation.sql
+psql "your_connection_string" < pgTableCreation.sql
+
+# Or in the Neon Web Console:
+# Copy the contents of pgTableCreation.sql and run it
+\end{verbatim}
+
+\subsubsection{Local (Development)}
+
+If you have PostgreSQL installed:
+
+\begin{verbatim}
+# Create database
+createdb patternview
+
+# Apply the schema
+psql patternview < pgTableCreation.sql
+
+# Verify
+psql patternview -c "\dt"
+\end{verbatim}
+
+\section{Running the Application}
+
+\subsection{Development Mode}
+
+\begin{verbatim}
+npm run dev
+\end{verbatim}
+
+The application will start at \texttt{http://localhost:3000}. Development with "hot reload" — changes in files are immediately visible.
+
+\subsection{Production Build}
+
+\begin{verbatim}
+npm run build
+npm start
+\end{verbatim}
+
+\subsection{Database Check}
+
+\begin{verbatim}
+# Run the check-db script
+node check-db.mjs
+
+# Or via API
+curl http://localhost:3000/api/check-db
+\end{verbatim}
+
+\section{Project Structure}
+
+The project uses the Next.js 13+ App Router with the following structure:
+
+\begin{verbatim}
+patternview/
+├── app/                                # Next.js App Router
+│   ├── layout.tsx                      # Root layout
+│   ├── page.tsx                        # Home page
+│   ├── globals.css                     # Global styles
+│   ├── (pages)/                        # Route group
+│   │   ├── dashboard/
+│   │   │   ├── page.tsx                # Dashboard page
+│   │   │   └── components/
+│   │   │       ├── AlgorithmEditor.tsx
+│   │   │       ├── AlgorithmManager.tsx
+│   │   │       ├── AnalyticsPanel.tsx
+│   │   │       ├── DashboardSidebar.tsx
+│   │   │       └── UserManager.tsx
+│   │   └── profile/
+│   │       └── page.tsx                # Profile page
+│   ├── algorithms/
+│   │   ├── layout.tsx
+│   │   └── [slug]/                     # Dynamic route
+│   │       ├── page.tsx
+│   │       └── AlgorithmVisualizer.tsx
+│   ├── api/
+│   │   ├── authorBookUtil.ts
+│   │   ├── auth/                       # Auth0 callbacks
+│   │   ├── books/
+│   │   │   └── route.ts
+│   │   ├── check-db/
+│   │   │   └── route.ts                # Database check
+│   │   ├── notepad/
+│   │   │   ├── route.ts                # CRUD operations
+│   │   │   └── pages/
+│   │   │       ├── route.ts
+│   │   │       └── [pageNumber]/
+│   │   │           └── route.ts
+│   │   └── users/
+│   │       ├── route.ts
+│   │       └── sync/
+│   │           └── route.ts            # Synchronization
+│   ├── components/
+│   │   ├── AlgoCard.tsx
+│   │   ├── button.tsx
+│   │   ├── card.tsx
+│   │   ├── DescriptionModal.tsx
+│   │   ├── Footer.tsx
+│   │   ├── ForwardRefEditor.tsx
+│   │   ├── Header.tsx
+│   │   ├── HeaderClient.tsx
+│   │   ├── InitializedMDXEditor.tsx
+│   │   ├── NotepadModal.tsx
+│   │   ├── ParticleBackground.tsx
+│   │   ├── TextBox.tsx
+│   │   ├── TypewriterHeading.tsx
+│   │   ├── background/
+│   │   │   └── Dither.tsx
+│   │   └── css/
+│   │       ├── DescriptionModal.module.css
+│   │       ├── mdxeditor.module.css
+│   │       └── reactTooltip.css
+│   ├── fonts/
+│   └── test/
+│       └── page.tsx                    # Testing page
+├── src/
+│   ├── adapters/
+│   │   ├── auth/
+│   │   │   └── auth0.client.ts
+│   │   ├── database/
+│   │   │   ├── client.ts
+│   │   │   ├── notepad.repository.ts
+│   │   │   ├── types.ts
+│   │   │   └── user.repository.ts
+│   │   └── unity/
+│   │       └── UnityProvider.tsx
+│   ├── domain/
+│   │   ├── algorithm/
+│   │   │   ├── algorithm.handler.ts
+│   │   │   ├── algorithm.registry.ts
+│   │   │   ├── algorithm.types.ts
+│   │   │   ├── handler.registry.ts
+│   │   │   ├── configs/
+│   │   │   │   ├── pathfinding.config.ts
+│   │   │   │   ├── queue.config.ts
+│   │   │   │   ├── radixSort.config.ts
+│   │   │   │   └── trie.config.ts
+│   │   │   └── handlers/
+│   │   │       ├── pathfinding.handler.ts
+│   │   │       ├── queue.handler.ts
+│   │   │       ├── radixSort.handler.ts
+│   │   │       └── trie.handler.ts
+│   │   ├── notepad/
+│   │   │   └── notepad.types.ts
+│   │   └── user/
+│   │       ├── user.service.ts
+│   │       └── user.types.ts
+│   └── shared/
+│       └── security/
+│           ├── rate-limit.ts
+│           ├── request-guards.ts
+│           └── validation.ts
+├── components/
+│   ├── Noise.tsx
+│   └── base/
+│       └── tooltip/
+├── lib/
+│   ├── auth0.ts                        # Auth0 integration
+│   ├── db.ts                           # Database queries
+│   ├── utils.ts                        # Utility functions
+│   └── utils/
+│       └── cx.ts                       # CSS className utility
+├── public/
+│   ├── pathfinding.lottie              # Lottie animations (Git LFS)
+│   ├── queue.lottie
+│   ├── sorting.lottie
+│   ├── trie.lottie
+│   └── Build/                          # Unity WebGL build (Git LFS)
+│       ├── webDemo.framework.js
+│       ├── webDemo.loader.js
+│       └── ...
+├── .env.local                          # Environment variables (GITIGNORE)
+├── .gitignore                          # Git ignore rules
+├── .gitattributes                      # Git LFS configuration
+├── package.json                        # Dependencies and scripts
+├── tsconfig.json                       # TypeScript configuration
+├── next.config.ts                      # Next.js configuration
+├── tailwind.config.ts                  # Tailwind CSS configuration
+├── postcss.config.mjs                  # PostCSS configuration
+├── eslint.config.mjs                   # ESLint configuration
+├── middleware.ts                       # Next.js middleware
+├── components.json                     # Component configuration
+├── pgTableCreation.sql                 # Database schema
+└── check-db.mjs                        # Database check script
+\end{verbatim}
+
+\section{Database Schema}
+
+\subsection{Tables and Relations}
+
+The database schema is defined in the \texttt{pgTableCreation.sql} file:
+
+\subsubsection{Table: userprofile}
+
+\begin{verbatim}
+CREATE TABLE userprofile (
+  id SERIAL PRIMARY KEY,
+  auth0_id VARCHAR(255) UNIQUE,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password_hash TEXT,
+  username VARCHAR(50) UNIQUE,
+  is_admin BOOLEAN NOT NULL DEFAULT false,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+\end{verbatim}
+
+Field Description:
+\begin{itemize}
+  \item \textbf{id} — Primary key.
+  \item \textbf{auth0\_id} — Auth0 user ID (unique).
+  \item \textbf{email} — E-mail address (unique).
+  \item \textbf{password\_hash} — Password hash (if Auth0 is not used).
+  \item \textbf{username} — Unique username.
+  \item \textbf{is\_admin} — Administrator flag.
+  \item \textbf{created\_at, updated\_at} — Timestamps.
+\end{itemize}
+
+\subsubsection{Table: notepad}
+
+\begin{verbatim}
+CREATE TABLE notepad (
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL UNIQUE REFERENCES userprofile(id) ON DELETE CASCADE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+\end{verbatim}
+
+Description:
+\begin{itemize}
+  \item One notepad per user (UNIQUE constraint).
+  \item Automatic deletion when the user is deleted (CASCADE).
+  \item Auto-update of the \texttt{updated\_at} column via trigger.
+\end{itemize}
+
+\subsubsection{Table: notepad\_page}
+
+\begin{verbatim}
+CREATE TABLE notepad_page (
+  id SERIAL PRIMARY KEY,
+  notepad_id INTEGER NOT NULL REFERENCES notepad(id) ON DELETE CASCADE,
+  page_number INTEGER NOT NULL CHECK (page_number >= 1 AND page_number <= 50),
+  title VARCHAR(100) DEFAULT 'Untitled',
+  content TEXT DEFAULT '',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE (notepad_id, page_number)
+);
+\end{verbatim}
+
+Description:
+\begin{itemize}
+  \item Maximum of 50 pages per notepad.
+  \item Combined unique index on \texttt{(notepad\_id, page\_number)}.
+  \item Auto-update of \texttt{updated\_at} via trigger.
+\end{itemize}
+
+\subsection{Indexes and Optimization}
+
+\begin{verbatim}
+-- Faster page search
+CREATE INDEX idx_notepad_page_notepad_id ON notepad_page(notepad_id);
+\end{verbatim}
+
+\subsection{Triggers and Functions}
+
+\begin{verbatim}
+-- Function for auto-update of updated_at
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+  NEW.updated_at = CURRENT_TIMESTAMP;
+  RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';
+
+-- Triggers on both tables
+CREATE TRIGGER update_notepad_updated_at
+  BEFORE UPDATE ON notepad
+  FOR EACH ROW
+  EXECUTE FUNCTION update_updated_at_column();
+
+CREATE TRIGGER update_notepad_page_updated_at
+  BEFORE UPDATE ON notepad_page
+  FOR EACH ROW
+  EXECUTE FUNCTION update_updated_at_column();

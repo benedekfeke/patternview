@@ -1,0 +1,372 @@
+% !TEX root = ../thesis.tex
+
+\chapter{User Manual}\label{app:user.manual}
+
+This manual is intended for students and teachers who want to use the Patternview visualization tool for learning algorithms and data structures. The application provides interactive visualizations with everyday analogies that help in a better understanding of abstract algorithmic concepts.
+
+\section{Introduction to the Application}
+
+Patternview is a web application aimed at improving the understanding of algorithms and data structures through interactive visualizations and pedagogically appropriate real-world analogies. The application covers the following topics:
+
+\begin{itemize}
+  \item \textbf{Data Structures} — Queue, Trie
+  \item \textbf{Pathfinding Algorithms} — Pathfinding (A*, Dijkstra's algorithm)
+  \item \textbf{Sorting Algorithms} — Radix Sort
+  \item \textbf{Other} — Additional visualizations as needed
+\end{itemize}
+
+Each module includes:
+\begin{itemize}
+  \item Real-time interactive 2D/3D visualization (Unity WebGL)
+  \item Synchronized pseudocode displayed step-by-step
+  \item Detailed explanations for each step
+  \item Theoretical background with complexity analysis
+  \item Integrated notepad for personal notes
+  \item AI assistant support (Google Gemini API) for questions and explanations
+\end{itemize}
+
+\section{Requirements and Preparation}
+
+\subsection{System Requirements}
+The application works in any modern web browser. We recommend the latest versions of the following browsers:
+\begin{itemize}
+  \item Google Chrome or Chromium (recommended)
+  \item Mozilla Firefox
+  \item Microsoft Edge
+  \item Safari (macOS and iOS)
+\end{itemize}
+
+\textbf{Note:} The application requires JavaScript and cookies to be enabled. Hardware acceleration (GPU) is recommended for smooth visualization performance.
+
+\subsection{Internet Connection}
+To take full advantage of all features (notepad synchronization, note-saving, AI assistant), you need a stable internet connection.
+
+\section{Access and Registration}
+
+\subsection{How to Sign Up}
+
+The application uses the Auth0 secure authentication system. The first time you visit the application, you will be redirected to the sign-up form.
+
+\begin{enumerate}
+  \item Open your web browser and navigate to the application address.
+  \item Click the "Sign Up" or "Login" button.
+  \item Choose your registration method:
+    \begin{itemize}
+      \item Email address and password (recommended)
+      \item Social networking (Google, GitHub, etc.)
+    \end{itemize}
+  \item Fill in the required information.
+  \item Confirm your email (if you chose email registration).
+  \item After successful registration, you will be directed into the application.
+\end{enumerate}
+
+\textbf{Security:} Your password and personal data are protected by the industry-standard OAuth 2.0. You never share your password with any third party.
+
+\subsection{Logging in on Subsequent Visits}
+
+On your next visit to the application:
+\begin{enumerate}
+  \item Click "Log In."
+  \item Enter your email address (or choose your social network).
+  \item Enter your password.
+  \item Click "Log In."
+\end{enumerate}
+
+\section{Navigation within the Application}
+
+\subsection{Main Interface}
+
+After logging in, you will be in the application's main menu. The interface is organized as follows:
+
+\begin{itemize}
+  \item \textbf{Header} — Patternview logo, user profile button, notepad access.
+  \item \textbf{Main Area} — Cards representing available algorithms and data structures (Lottie animations).
+  \item \textbf{Footer} — Information about the application, contact details, links.
+\end{itemize}
+
+\subsection{Algorithm Cards}
+
+Each card displays:
+\begin{itemize}
+  \item \textbf{Name} — The name of the algorithm or data structure.
+  \item \textbf{Short Description} — What you will learn and how the algorithm is used.
+  \item \textbf{Animation (Lottie)} — An animated visual representation.
+  \item \textbf{Open Button} — To launch the interactive visualization.
+\end{itemize}
+
+\section{Working with Visualizations}
+
+\subsection{Workspace Layout}
+
+When you open any algorithm, a two-panel interface appears:
+
+\begin{itemize}
+  \item \textbf{Left Panel (Primary Interaction Zone)} — Displays the interactive algorithm visualization in 2D/3D graphics format (Unity WebGL). This is the main workspace where you see how the algorithm functions in real-time.
+  \item \textbf{Right Panel (Information and Control Zone)} — Contains:
+    \begin{itemize}
+      \item Algorithm pseudocode with the current step highlighted.
+      \item Textual explanation of what is happening in the current step.
+      \item Control buttons (Next step, Previous step, Run...).
+      \item Other algorithm-specific information.
+      \item Option to find out more information ("Info" or "More" button).
+    \end{itemize}
+\end{itemize}
+
+\subsection{Interaction with the Visualization}
+
+\subsubsection{Control Buttons}
+Depending on the specific algorithm, the following are usually available:
+\begin{itemize}
+  \item \textbf{Next Step (Next)} — Executes the next step of the algorithm.
+  \item \textbf{Previous Step (Back)} — Returns to the previous step.
+  \item \textbf{Run (Run)} — Automatically executes all steps in sequence.
+  \item \textbf{Stop (Stop)} — Pauses the automatic execution.
+  \item \textbf{Reset} — Resets the algorithm to its initial state.
+  \item \textbf{Playback Speed} — Slider to adjust the speed of the automatic playback.
+\end{itemize}
+
+\subsubsection{Data Input}
+
+Some algorithms (e.g., Radix Sort, Pathfinding) allow you to enter your own data:
+\begin{enumerate}
+  \item Find the input field in the right panel.
+  \item Enter the desired values (e.g., zip codes, graph).
+  \item Click "Confirm" or "Run."
+  \item The visualization will refresh with your data.
+\end{enumerate}
+
+\textbf{Caution:} The application validates input data. If you enter an incorrect format, an alert will appear with details.
+
+\subsection{Understanding Analogies}
+
+A key element of the application is real-world analogies:
+
+\begin{itemize}
+  \item \textbf{Queue} — Presented as people waiting in line at a store. First-in, first-out (FIFO).
+  \item \textbf{Trie (Digital Tree)} — Visualized as a library where you search for books by author name or a word in the title.
+  \item \textbf{Radix Sort} — Presented as sorting letters based on zip codes in postal operations, or sorting by digits from left to right.
+  \item \textbf{Pathfinding (A*, Dijkstra)} — Path mapping in GPS navigation versus human intuition — finding the shortest path.
+\end{itemize}
+
+These analogies help you "anchor" abstract concepts in something you already know from real life.
+
+\section{Using the Notepad}
+
+\subsection{What is the Notepad?}
+
+The notepad is an integrated note-taking app that allows you to document observations directly while learning. All your notes are automatically saved in the database and synchronized across devices.
+
+\subsection{How to Open the Notepad}
+
+\begin{enumerate}
+  \item Find the "Notepad" icon or button in the application header (at the top).
+  \item Click it.
+  \item A panel will appear with a list of your notepads or the editor itself.
+\end{enumerate}
+
+\subsection{Creating and Editing Notes}
+
+\begin{enumerate}
+  \item Click "Create New Notepad" or select an existing one.
+  \item Type your text into the workspace.
+  \item The text editor (MDX Editor) supports:
+    \begin{itemize}
+      \item Basic formatting (bold, italics, underline)
+      \item Lists (bulleted and numbered)
+      \item Headings of different levels
+      \item Code blocks
+      \item Hyperlinks
+    \end{itemize}
+  \item Changes are automatically saved (no "Save" button needed).
+\end{enumerate}
+
+\subsection{Organizing Pages}
+
+A notepad can be divided into multiple pages (up to 50 pages per notepad):
+\begin{itemize}
+  \item Click "New Page" to create a new page.
+  \item Navigate between pages by clicking their numbers or titles.
+  \item Each page has its own change history.
+  \item Pages can be deleted or reordered.
+\end{itemize}
+
+\section{Theoretical Background and Detailed Explanations}
+
+\subsection{Opening Detailed Analysis}
+
+Each algorithm includes a detailed theoretical analysis:
+\begin{enumerate}
+  \item Find the "Details," "Info," or "More Information" button in the right panel.
+  \item Click it.
+  \item A modal window or side panel will open with the following information:
+\end{enumerate}
+
+\begin{itemize}
+  \item \textbf{Algorithm Description} — What the functioning principle is and how it works.
+  \item \textbf{Complexity Analysis} — Time and space complexity (Big O notation).
+    \begin{itemize}
+      \item Time: O(n), O(n log n), O(n²), etc.
+      \item Space: O(1), O(n), etc.
+    \end{itemize}
+  \item \textbf{Practical Applications} — Where the given algorithm is used in the real world.
+  \item \textbf{Advantages and Disadvantages} — Comparison with other approaches.
+  \item \textbf{Examples} — Specific examples and use cases.
+  \item \textbf{Pseudocode} — Formal description of the algorithm in a pseudo-language.
+\end{itemize}
+
+\section{AI Assistant (Gemini)}
+
+The application includes an integrated AI assistant based on the Google Gemini API, which will help you:
+
+\begin{itemize}
+  \item Answer questions related to algorithms.
+  \item Explain complex concepts with additional examples.
+  \item Assist with problems and queries.
+  \item Generate additional materials.
+\end{itemize}
+
+The AI assistant is available in the notepad or via a specific button in the interface.
+
+\section{Frequently Asked Questions (FAQ)}
+
+\subsection{General Questions}
+
+\textbf{Question: Is the Patternview application free?}\newline
+Answer: Yes, the application is free for all students, teachers, and users.
+
+\textbf{Question: Do I need to have an account?}\newline
+Answer: Yes, you need an account to synchronize data and to use all features (notepad, synchronization).
+
+\textbf{Question: Are my notes safe?}\newline
+Answer: Yes, all data is encrypted and stored on secure servers (Neon PostgreSQL). However, we recommend not storing sensitive personal data.
+
+\textbf{Question: How does authentication work?}\newline
+Answer: The application uses Auth0 with the OAuth 2.0 protocol, which is the industry standard for secure authentication.
+
+\subsection{Technical Questions}
+
+\textbf{Question: The application is not working. What should I do?}\newline
+Answer: Try the following steps:
+\begin{itemize}
+  \item Refresh the page (F5 or Ctrl+R).
+  \item Clear the browser cache (Ctrl+Shift+Delete).
+  \item Try another browser (ideally Google Chrome).
+  \item Check your internet connection.
+  \item Try logging out and logging in again.
+  \item Contact support.
+\end{itemize}
+
+\textbf{Question: Why is the visualization slow?}\newline
+Answer: Try these solutions:
+\begin{itemize}
+  \item Close other applications and browser tabs.
+  \item Enable hardware acceleration in your browser settings (GPU acceleration).
+  \item Update your computer's graphic drivers.
+  \item Try lowering the graphics quality (if available in settings).
+  \item Try using another browser.
+\end{itemize}
+
+\textbf{Question: How do I reset my password?}\newline
+Answer: On the login page, click "Forgot Password" and follow the instructions.
+
+\textbf{Question: Can I download my notes?}\newline
+Answer: Currently, there is no direct download option available, but you can copy your notes into a text editor or take screenshots of them.
+
+\section{Troubleshooting}
+
+\subsection{Login Issues}
+
+\textbf{Error: "Incorrect username or password"}\newline
+Solution:
+\begin{itemize}
+  \item Check that you entered the correct email address.
+  \item Check Caps Lock — the password is case-sensitive.
+  \item Reset your password via "Forgot Password."
+  \item Try signing in with a social network (Google, GitHub).
+  \item Check that your email is confirmed (try resending the confirmation email).
+\end{itemize}
+
+\textbf{Error: "We cannot find this email address"}\newline
+Solution:
+\begin{itemize}
+  \item Check that you have an account created.
+  \item Try registering using "Create a new account."
+  \item Try another email (if you registered with a different one).
+  \item Check your spam folder (the confirmation email might end up there).
+\end{itemize}
+
+\subsection{Visualization Issues}
+
+\textbf{Error: "Visualization is not loading"}\newline
+Solution:
+\begin{itemize}
+  \item Refresh the page (F5).
+  \item Wait for it to load (the first load of the Unity WebGL build can take 10-30 seconds).
+  \item Check your internet connection.
+  \item Try another browser (Chrome is recommended).
+  \item Try disabling browser extensions (they may interfere with loading).
+  \item Clear the cache and try again.
+\end{itemize}
+
+\textbf{Error: "Algorithm is not responding to interaction"}\newline
+Solution:
+\begin{itemize}
+  \item Wait — the visualization might be in the process of starting.
+  \item Click on the canvas on the left side (the Unity visualization must have focus).
+  \item Reset the algorithm by clicking "Reset" or "Restart."
+  \item Refresh the page.
+  \item Try another browser.
+\end{itemize}
+
+\subsection{Notepad Issues}
+
+\textbf{Error: "Notes are not saving"}\newline
+Solution:
+\begin{itemize}
+  \item Check your internet connection.
+  \item Wait for auto-save (usually within 5 seconds).
+  \item Try logging out and logging in again.
+  \item Clear the browser cache.
+  \item Try another browser.
+\end{itemize}
+
+\textbf{Error: "Notepad is not loading"}\newline
+Solution:
+\begin{itemize}
+  \item Refresh the page.
+  \item Check your internet connection.
+  \item Try logging out and logging in again.
+  \item Clear the cache and cookies.
+\end{itemize}
+
+\section{Tips and Tricks}
+
+\begin{itemize}
+  \item \textbf{Slow Startup} — During the first launch of an algorithm, the Unity WebGL build loads, which can take longer. Do not panic!
+  \item \textbf{Repetition} — Don't hesitate to run algorithms multiple times with different inputs. Repetition is the key to understanding.
+  \item \textbf{Combine with Notes} — Take notes about what you see while the algorithm is running.
+  \item \textbf{Comparison} — Try comparing different algorithms (e.g., various sorting methods) to understand the differences.
+  \item \textbf{Experiment} — Try changing inputs and see how the output changes. This will help you understand edge cases.
+\end{itemize}
+
+\section{Contact and Support}
+
+If you encounter a problem or have a suggestion for improvement:
+\begin{itemize}
+  \item \textbf{Email} — benedek.feke@student.tuke.sk
+  \item \textbf{GitHub Issues} — Report a bug or suggest new features at \url{https://github.com/benedekfeke/patternview/issues}
+  \item \textbf{GitHub Discussions} — Application discussion: \url{https://github.com/benedekfeke/patternview/discussions}
+\end{itemize}
+
+\section{Additional Resources}
+
+To learn more about algorithms and data structures:
+\begin{itemize}
+  \item \textbf{Khan Academy} — Free courses on algorithms.
+  \item \textbf{Visualgo.net} — Further algorithm visualizations.
+  \item \textbf{GeeksforGeeks} — Detailed explanations and examples.
+  \item \textbf{LeetCode} — Practical algorithm tasks.
+  \item \textbf{Corresponding textbooks} — According to your university.
+\end{itemize}
+
+\end{document}
